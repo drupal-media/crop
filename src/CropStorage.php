@@ -12,6 +12,6 @@ use Drupal\Core\Entity\Sql\SqlContentEntityStorage;
 /**
  * Image crop storage class.
  */
-class ImageCropStorage extends SqlContentEntityStorage implements CropStorageInterface {
+class CropStorage extends SqlContentEntityStorage implements CropStorageInterface {
 
 }

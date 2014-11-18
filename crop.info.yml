@@ -3,4 +3,6 @@ description: 'Provides storage and API for image crops.'
 core: 8.x
 package: Media
 type: module
-dependencies: { }
+dependencies:
+  - image
+  - user

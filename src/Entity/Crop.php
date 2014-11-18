@@ -35,7 +35,7 @@ use Drupal\crop\CropInterface;
  *   revision_table = "crop_revision",
  *   revision_data_table = "crop_field_revision",
  *   fieldable = TRUE,
- *   translatable = TRUE,
+ *   translatable = FALSE,
  *   render_cache = FALSE,
  *   entity_keys = {
  *     "id" = "cid",
