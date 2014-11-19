@@ -6,3 +6,15 @@
  *
  * Provides storage and API for image crops.
  */
+
+
+/**
+ * Implements hook_theme().
+ */
+function crop_theme() {
+  return [
+    'crop_crop_summary' => array(
+      'variables' => array('data' => NULL, 'effect' => array()),
+    ),
+  ];
+}
