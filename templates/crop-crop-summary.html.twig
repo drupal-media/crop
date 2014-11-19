@@ -7,7 +7,8 @@
  * - data: The current configuration for this resize effect, including:
  *   - width: The width of the resized image.
  *   - height: The height of the resized image.
- *   - scale_no_crop: Scale even if no user crop provided.
+ *   - automatic_crop: Scale even if no manual crop provided.
+ *   - anchor: The part of the image that will be retained after cropping.
  * - effect: The effect information, including:
  *   - id: The effect identifier.
  *   - label: The effect name.
@@ -32,6 +33,6 @@
 
 {% if not data.automatic_crop -%}
     {% trans %}
-    (only if user crop provided)
+    (only if manual crop provided)
     {% endtrans %}
 {%- endif %}

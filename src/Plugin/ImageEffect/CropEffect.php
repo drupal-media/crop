@@ -21,8 +21,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @ImageEffect(
  *   id = "crop_crop",
- *   label = @Translation("User crop"),
- *   description = @Translation("Applies user provided crop to the image.")
+ *   label = @Translation("Manual crop"),
+ *   description = @Translation("Applies manually provided crop to the image.")
  * )
  */
 class CropEffect extends CropImageEffect implements ContainerFactoryPluginInterface {
@@ -86,7 +86,7 @@ class CropEffect extends CropImageEffect implements ContainerFactoryPluginInterf
       $y = $position['y'] - $size['height'] / 2;
 
       if (!$image->crop($x, $y, $size['width'], $size['height'])) {
-        $this->logger->error('Image crop failed using the %toolkit toolkit on %path (%mimetype, %dimensions)', array(
+        $this->logger->error('Manual image crop failed using the %toolkit toolkit on %path (%mimetype, %dimensions)', array(
             '%toolkit' => $image->getToolkitId(),
             '%path' => $image->getSource(),
             '%mimetype' => $image->getMimeType(),
@@ -132,7 +132,7 @@ class CropEffect extends CropImageEffect implements ContainerFactoryPluginInterf
 
     $form['fallback'] = [
       '#type' => 'fieldset',
-      '#title' => t('No user crop behaviour'),
+      '#title' => t('No manual crop behaviour'),
       '#tree' => FALSE,
     ];
 
@@ -140,7 +140,7 @@ class CropEffect extends CropImageEffect implements ContainerFactoryPluginInterf
       '#type' => 'checkbox',
       '#title' => t('Crop automatically'),
       '#default_value' => $this->configuration['automatic_crop'],
-      '#description' => t("Crop automatically if no user crop provided."),
+      '#description' => t("Crop automatically if no manual crop provided."),
       '#parents' => ['data', 'automatic_crop'],
     );
 
