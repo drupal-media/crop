@@ -22,7 +22,7 @@ class CropCRUDTest extends KernelTestBase {
    *
    * @var array
    */
-  public static $modules = array('user', 'image', 'crop');
+  public static $modules = ['user', 'image', 'crop'];
 
   /**
    * The crop storage.

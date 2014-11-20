@@ -88,7 +88,7 @@ class CropTypeForm extends EntityForm {
   public function save(array $form, FormStateInterface $form_state) {
     $type = $this->entity;
     $type->id = trim($type->id());
-    $type->name = trim($type->name);
+    $type->label = trim($type->label);
 
     $status = $type->save();
 
