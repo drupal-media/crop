@@ -1,0 +1,18 @@
+<?php
+
+/**
+ * @file
+ * Contains \Drupal\crop\CropTypeInterface.
+ */
+
+namespace Drupal\crop;
+
+use Drupal\Core\Config\Entity\ConfigEntityInterface;
+use Drupal\Core\Config\Entity\ThirdPartySettingsInterface;
+
+/**
+ * Provides an interface defining a crop type entity.
+ */
+interface CropTypeInterface extends ConfigEntityInterface, ThirdPartySettingsInterface {
+
+}

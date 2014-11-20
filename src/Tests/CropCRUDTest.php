@@ -29,7 +29,14 @@ class CropCRUDTest extends KernelTestBase {
    *
    * @var \Drupal\crop\CropStorageInterface.
    */
-  protected $controller;
+  protected $cropStorage;
+
+  /**
+   * The crop storage.
+   *
+   * @var \Drupal\Core\Config\Entity\ConfigEntityStorageInterface.
+   */
+  protected $cropTypeStorage;
 
   /**
    * Test image style.
@@ -38,12 +45,20 @@ class CropCRUDTest extends KernelTestBase {
    */
   protected $testStyle;
 
+  /**
+   * Test crop type.
+   *
+   * @var \Drupal\crop\CropInterface
+   */
+  protected $cropType;
+
   protected function setUp() {
     parent::setUp();
 
     /** @var \Drupal\Core\Entity\EntityManagerInterface $entity_manager */
     $entity_manager = $this->container->get('entity.manager');
-    $this->controller = $entity_manager->getStorage('crop');
+    $this->cropStorage = $entity_manager->getStorage('crop');
+    $this->cropTypeStorage = $entity_manager->getStorage('crop_type');
 
     // Create DB schemas.
     $entity_manager->onEntityTypeCreate($entity_manager->getDefinition('user'));
@@ -57,14 +72,47 @@ class CropCRUDTest extends KernelTestBase {
       'effects' => [],
     ]);
     $this->testStyle->save();
+
+    // Create test crop type
+    $this->cropType = $entity_manager->getStorage('crop_type')->create([
+      'id' => 'test_type',
+      'label' => 'Test crop type',
+      'description' => 'Some nice desc.',
+    ]);
+    $this->cropType->save();
   }
 
   /**
-   * Tests save.
+   * Tests crop type save.
+   */
+  public function testCropTypeSave() {
+    $values = [
+      'id' => $this->randomMachineName(),
+      'label' => $this->randomString(),
+      'description' => $this->randomGenerator->sentences(8),
+    ];
+    $crop_type = $this->cropTypeStorage->create($values);
+
+    try {
+      $crop_type->save();
+      $this->assertTrue(TRUE, 'Crop type saved correctly.');
+    } catch (\Exception $exception) {
+      $this->assertTrue(FALSE, 'Crop type not saved correctly.');
+    }
+
+    $loaded = $this->container->get('config.factory')->get('crop.type.' . $values['id'])->get();
+    foreach ($values as $key => $value) {
+      $this->assertEqual($loaded[$key], $value, String::format('Correct value for @field found.', ['@field' => $key]));
+    }
+  }
+
+  /**
+   * Tests crop save.
    */
   public function testCropSave() {
     /** @var \Drupal\crop\CropInterface $crop */
     $values = [
+      'type' => $this->cropType->id(),
       'entity_id' => 1,
       'entity_type' => 'file',
       'x' => '100',
@@ -73,7 +121,7 @@ class CropCRUDTest extends KernelTestBase {
       'height' => '250',
       'image_style' => $this->testStyle->id(),
     ];
-    $crop = $this->controller->create($values);
+    $crop = $this->cropStorage->create($values);
 
     try {
       $crop->save();
@@ -82,10 +130,11 @@ class CropCRUDTest extends KernelTestBase {
       $this->assertTrue(FALSE, 'Crop not saved correctly.');
     }
 
-    $loaded_crop = $this->controller->loadUnchanged(1);
+    $loaded_crop = $this->cropStorage->loadUnchanged(1);
     foreach ($values as $key => $value) {
       switch ($key) {
         case 'image_style':
+        case 'type':
           $this->assertEqual($loaded_crop->{$key}->target_id, $value, String::format('Correct value for @field found.', ['@field' => $key]));
           break;
 

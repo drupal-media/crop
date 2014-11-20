@@ -19,6 +19,7 @@ use Drupal\crop\CropInterface;
  * @ContentEntityType(
  *   id = "crop",
  *   label = @Translation("Crop"),
+ *   bundle_label = @Translation("Crop type"),
  *   handlers = {
  *     "storage" = "Drupal\crop\CropStorage",
  *     "view_builder" = "Drupal\Core\Entity\EntityViewBuilder",
@@ -39,9 +40,11 @@ use Drupal\crop\CropInterface;
  *   render_cache = FALSE,
  *   entity_keys = {
  *     "id" = "cid",
+ *     "bundle" = "type",
  *     "revision" = "vid",
  *     "uuid" = "uuid"
  *   },
+ *   bundle_entity_type = "crop_type",
  *   permission_granularity = "entity_type",
  *   admin_permission = "administer crop",
  *   links = {
@@ -102,6 +105,12 @@ class Crop extends ContentEntityBase implements CropInterface {
       ->setDescription(t('The crop revision ID.'))
       ->setReadOnly(TRUE)
       ->setSetting('unsigned', TRUE);
+
+    $fields['type'] = BaseFieldDefinition::create('entity_reference')
+      ->setLabel(t('Type'))
+      ->setDescription(t('The crop type.'))
+      ->setSetting('target_type', 'crop_type')
+      ->setReadOnly(TRUE);
 
     $fields['langcode'] = BaseFieldDefinition::create('language')
       ->setLabel(t('Language code'))
