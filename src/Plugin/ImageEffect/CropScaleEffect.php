@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains \Drupal\crop\Plugin\ImageEffect\CropEffect.
+ * Contains \Drupal\crop\Plugin\ImageEffect\CropScaleEffect.
  */
 
 namespace Drupal\crop\Plugin\ImageEffect;
@@ -12,7 +12,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Image\ImageInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\crop\CropStorageInterface;
-use Drupal\image\Plugin\ImageEffect\CropImageEffect;
+use Drupal\image\Plugin\ImageEffect\ScaleAndCropImageEffect;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -20,12 +20,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Crops an image resource.
  *
  * @ImageEffect(
- *   id = "crop_crop",
- *   label = @Translation("Manual crop"),
- *   description = @Translation("Applies manually provided crop to the image.")
+ *   id = "crop_crop_scale",
+ *   label = @Translation("Manual crop & crop"),
+ *   description = @Translation("Applies manually provided crop to the image and scales it to the configured size.")
  * )
  */
-class CropEffect extends CropImageEffect implements ContainerFactoryPluginInterface {
+class CropScaleEffect extends ScaleAndCropImageEffect implements ContainerFactoryPluginInterface {
 
   /**
    * Crop entity storage.
@@ -86,11 +86,11 @@ class CropEffect extends CropImageEffect implements ContainerFactoryPluginInterf
 
       if (!$image->crop($x, $y, $size['width'], $size['height'])) {
         $this->logger->error('Manual image crop failed using the %toolkit toolkit on %path (%mimetype, %dimensions)', array(
-            '%toolkit' => $image->getToolkitId(),
-            '%path' => $image->getSource(),
-            '%mimetype' => $image->getMimeType(),
-            '%dimensions' => $image->getWidth() . 'x' . $image->getHeight()
-          ));
+          '%toolkit' => $image->getToolkitId(),
+          '%path' => $image->getSource(),
+          '%mimetype' => $image->getMimeType(),
+          '%dimensions' => $image->getWidth() . 'x' . $image->getHeight()
+        ));
         return FALSE;
       }
     }
