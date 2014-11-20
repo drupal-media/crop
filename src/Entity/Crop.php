@@ -35,7 +35,7 @@ use Drupal\crop\CropInterface;
  *   revision_table = "crop_revision",
  *   revision_data_table = "crop_field_revision",
  *   fieldable = TRUE,
- *   translatable = FALSE,
+ *   translatable = TRUE,
  *   render_cache = FALSE,
  *   entity_keys = {
  *     "id" = "cid",
@@ -60,7 +60,7 @@ class Crop extends ContentEntityBase implements CropInterface {
   public function preSave(EntityStorageInterface $storage) {
     parent::preSave($storage);
 
-    // If no revision author has been set explicitly, make the media owner the
+    // If no revision author has been set explicitly, make the current user
     // revision author.
     if (!$this->get('revision_uid')->entity) {
       $this->set('revision_uid', \Drupal::currentUser()->id());
@@ -74,7 +74,7 @@ class Crop extends ContentEntityBase implements CropInterface {
     parent::preSaveRevision($storage, $record);
 
     if (!$this->isNewRevision() && isset($this->original) && (!isset($record->revision_log) || $record->revision_log === '')) {
-      // If we are updating an existing node without adding a new revision, we
+      // If we are updating an existing crop without adding a new revision, we
       // need to make sure $entity->revision_log is reset whenever it is empty.
       // Therefore, this code allows us to avoid clobbering an existing log
       // entry with an empty one.
@@ -103,15 +103,22 @@ class Crop extends ContentEntityBase implements CropInterface {
       ->setReadOnly(TRUE)
       ->setSetting('unsigned', TRUE);
 
+    $fields['langcode'] = BaseFieldDefinition::create('language')
+      ->setLabel(t('Language code'))
+      ->setDescription(t('The node language code.'))
+      ->setRevisionable(TRUE);
+
     $fields['entity_id'] = BaseFieldDefinition::create('integer')
       ->setLabel(t('Entity ID'))
       ->setDescription(t('ID of entity crop belongs to.'))
       ->setSetting('unsigned', TRUE)
+      ->setRevisionable(TRUE)
       ->setReadOnly(TRUE);
 
     $fields['entity_type'] = BaseFieldDefinition::create('string')
       ->setLabel(t('Entity type'))
       ->setDescription(t('The type of entity crop belongs to.'))
+      ->setRevisionable(TRUE)
       ->setReadOnly(TRUE);
 
     // Denormalized information, which is calculated in storage plugin for a
@@ -128,35 +135,46 @@ class Crop extends ContentEntityBase implements CropInterface {
     $fields['uri'] = BaseFieldDefinition::create('uri')
       ->setLabel(t('URI'))
       ->setDescription(t('The URI of the image crop belongs to.'))
+      ->setRevisionable(TRUE)
+      ->setTranslatable(TRUE)
       ->setSetting('max_length', 255);
 
     $fields['image_style'] = BaseFieldDefinition::create('entity_reference')
       ->setLabel(t('Image style'))
       ->setDescription(t('The image style crop relates to.'))
+      ->setRevisionable(TRUE)
       ->setSetting('target_type', 'image_style')
       ->setReadOnly(TRUE);
 
     $fields['height'] = BaseFieldDefinition::create('integer')
       ->setLabel(t('Height'))
       ->setDescription(t('The crop height.'))
+      ->setRevisionable(TRUE)
+      ->setTranslatable(TRUE)
       ->setReadOnly(TRUE)
       ->setSetting('unsigned', TRUE);
 
     $fields['width'] = BaseFieldDefinition::create('integer')
       ->setLabel(t('Width'))
       ->setDescription(t('The crop width.'))
+      ->setRevisionable(TRUE)
+      ->setTranslatable(TRUE)
       ->setReadOnly(TRUE)
       ->setSetting('unsigned', TRUE);
 
     $fields['x'] = BaseFieldDefinition::create('integer')
       ->setLabel(t('X coordinate'))
       ->setDescription(t("The crop's X coordinate."))
+      ->setRevisionable(TRUE)
+      ->setTranslatable(TRUE)
       ->setReadOnly(TRUE)
       ->setSetting('unsigned', TRUE);
 
     $fields['y'] = BaseFieldDefinition::create('integer')
       ->setLabel(t('Y coordinate'))
       ->setDescription(t("The crop's Y coordinate."))
+      ->setRevisionable(TRUE)
+      ->setTranslatable(TRUE)
       ->setReadOnly(TRUE)
       ->setSetting('unsigned', TRUE);
 
