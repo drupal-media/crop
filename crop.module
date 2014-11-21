@@ -1,0 +1,8 @@
+<?php
+
+/**
+ * @file
+ * The Crop API Drupal module.
+ *
+ * Provides storage and API for image crops.
+ */
