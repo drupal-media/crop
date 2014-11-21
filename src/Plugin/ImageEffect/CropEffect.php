@@ -174,14 +174,18 @@ class CropEffect extends ConfigurableImageEffectBase implements ContainerFactory
    */
   protected function getCrop(ImageInterface $image) {
     if (!isset($this->crop)) {
+      $this->crop = FALSE;
+
       $ids = $this->query
         ->condition('uri', $image->getSource())
         ->condition('type', $this->configuration['crop_type'])
         ->sort('cid')
         ->range(0, 1)
         ->execute();
-      $crop = $this->storage->load(current($ids));
-      $this->crop = $crop ? $crop : FALSE;
+
+      if (!empty($ids) && ($crop = $this->storage->load(current($ids)))) {
+        $this->crop = $crop;
+      }
     }
 
     return $this->crop;
