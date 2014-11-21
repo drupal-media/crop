@@ -8,14 +8,13 @@
 namespace Drupal\crop\Tests;
 
 use Drupal\Component\Utility\String;
-use Drupal\simpletest\KernelTestBase;
 
 /**
  * Tests the crop entity CRUD operations.
  *
  * @group crop
  */
-class CropCRUDTest extends KernelTestBase {
+class CropCRUDTest extends CropUnitTestBase {
 
   /**
    * Modules to enable.
@@ -23,64 +22,6 @@ class CropCRUDTest extends KernelTestBase {
    * @var array
    */
   public static $modules = ['user', 'image', 'crop'];
-
-  /**
-   * The crop storage.
-   *
-   * @var \Drupal\crop\CropStorageInterface.
-   */
-  protected $cropStorage;
-
-  /**
-   * The crop storage.
-   *
-   * @var \Drupal\Core\Config\Entity\ConfigEntityStorageInterface.
-   */
-  protected $cropTypeStorage;
-
-  /**
-   * Test image style.
-   *
-   * @var \Drupal\image\ImageStyleInterface
-   */
-  protected $testStyle;
-
-  /**
-   * Test crop type.
-   *
-   * @var \Drupal\crop\CropInterface
-   */
-  protected $cropType;
-
-  protected function setUp() {
-    parent::setUp();
-
-    /** @var \Drupal\Core\Entity\EntityManagerInterface $entity_manager */
-    $entity_manager = $this->container->get('entity.manager');
-    $this->cropStorage = $entity_manager->getStorage('crop');
-    $this->cropTypeStorage = $entity_manager->getStorage('crop_type');
-
-    // Create DB schemas.
-    $entity_manager->onEntityTypeCreate($entity_manager->getDefinition('user'));
-    $entity_manager->onEntityTypeCreate($entity_manager->getDefinition('image_style'));
-    $entity_manager->onEntityTypeCreate($entity_manager->getDefinition('crop'));
-
-    // Create test image style
-    $this->testStyle = $entity_manager->getStorage('image_style')->create([
-      'name' => 'test',
-      'label' => 'Test image style',
-      'effects' => [],
-    ]);
-    $this->testStyle->save();
-
-    // Create test crop type
-    $this->cropType = $entity_manager->getStorage('crop_type')->create([
-      'id' => 'test_type',
-      'label' => 'Test crop type',
-      'description' => 'Some nice desc.',
-    ]);
-    $this->cropType->save();
-  }
 
   /**
    * Tests crop type save.
@@ -145,4 +86,5 @@ class CropCRUDTest extends KernelTestBase {
     }
 
   }
+
 }

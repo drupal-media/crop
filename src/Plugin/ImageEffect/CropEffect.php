@@ -91,15 +91,10 @@ class CropEffect extends ConfigurableImageEffectBase implements ContainerFactory
     }
 
     if (($crop = $this->getCrop($image))) {
-      $position = $crop->position();
+      $anchor = $crop->anchor();
       $size = $crop->size();
 
-      // Crop effect expects x,y to represent top left corner. In our case it
-      // represents center of crop area so we need to transform.
-      $x = $position['x'] - $size['width'] / 2;
-      $y = $position['y'] - $size['height'] / 2;
-
-      if (!$image->crop($x, $y, $size['width'], $size['height'])) {
+      if (!$image->crop($anchor['x'], $anchor['y'], $size['width'], $size['height'])) {
         $this->logger->error('Manual image crop failed using the %toolkit toolkit on %path (%mimetype, %dimensions)', [
             '%toolkit' => $image->getToolkitId(),
             '%path' => $image->getSource(),

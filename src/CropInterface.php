@@ -28,4 +28,12 @@ interface CropInterface extends ContentEntityInterface {
    *   Array with two keys (width, height) each side dimensions as values.
    */
   public function size();
+
+  /**
+   * Gets crop anchor (top-left corner of crop area)
+   *
+   * @return array
+   *   Array with two keys (x, y) and anchor coordinates as values.
+   */
+  public function anchor();
 }

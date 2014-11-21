@@ -70,6 +70,16 @@ class Crop extends ContentEntityBase implements CropInterface {
   /**
    * {@inheritdoc}
    */
+  public function anchor() {
+    return [
+      'x' => $this->x->value - $this->width->value / 2,
+      'y' => $this->y->value - $this->height->value / 2,
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function size() {
     return [
       'width' => $this->width->value,

@@ -38,6 +38,13 @@ class CropFunctionalTest extends WebTestBase {
    */
   protected $testStyle;
 
+  /**
+   * Test crop type.
+   *
+   * @var \Drupal\crop\CropInterface
+   */
+  protected $cropType;
+
   protected function setUp() {
     parent::setUp();
 
