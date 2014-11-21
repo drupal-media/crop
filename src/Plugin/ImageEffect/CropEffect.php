@@ -7,12 +7,13 @@
 
 namespace Drupal\crop\Plugin\ImageEffect;
 
+use Drupal\Core\Config\Entity\ConfigEntityStorageInterface;
 use Drupal\Core\Entity\Query\QueryInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Image\ImageInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\crop\CropStorageInterface;
-use Drupal\image\Plugin\ImageEffect\CropImageEffect;
+use Drupal\image\ConfigurableImageEffectBase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -25,7 +26,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   description = @Translation("Applies manually provided crop to the image.")
  * )
  */
-class CropEffect extends CropImageEffect implements ContainerFactoryPluginInterface {
+class CropEffect extends ConfigurableImageEffectBase implements ContainerFactoryPluginInterface {
 
   /**
    * Crop entity storage.
@@ -33,6 +34,13 @@ class CropEffect extends CropImageEffect implements ContainerFactoryPluginInterf
    * @var \Drupal\crop\CropStorageInterface
    */
   protected $storage;
+
+  /**
+   * Crop type entity storage.
+   *
+   * @var \Drupal\Core\Config\Entity\ConfigEntityStorageInterface
+   */
+  protected $typeStorage;
 
   /**
    * Crop entity query.
@@ -51,9 +59,10 @@ class CropEffect extends CropImageEffect implements ContainerFactoryPluginInterf
   /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerInterface $logger, CropStorageInterface $crop_storage, QueryInterface $storage_query) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerInterface $logger, CropStorageInterface $crop_storage, ConfigEntityStorageInterface $crop_type_storage, QueryInterface $storage_query) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $logger);
     $this->storage = $crop_storage;
+    $this->typeStorage = $crop_type_storage;
     $this->query = $storage_query;
   }
 
@@ -67,6 +76,7 @@ class CropEffect extends CropImageEffect implements ContainerFactoryPluginInterf
       $plugin_definition,
       $container->get('logger.factory')->get('image'),
       $container->get('entity.manager')->getStorage('crop'),
+      $container->get('entity.manager')->getStorage('crop_type'),
       $container->get('entity.query')->get('crop')
     );
   }
@@ -75,6 +85,11 @@ class CropEffect extends CropImageEffect implements ContainerFactoryPluginInterf
    * {@inheritdoc}
    */
   public function applyEffect(ImageInterface $image) {
+    if (empty($this->configuration['crop_type']) || !$this->typeStorage->load($this->configuration['crop_type'])) {
+      $this->logger->error('Manual image crop failed due to misconfigured crop type on %path.', ['%path' => $image->getSource()]);
+      return FALSE;
+    }
+
     if (($crop = $this->getCrop($image))) {
       $position = $crop->position();
       $size = $crop->size();
@@ -85,17 +100,15 @@ class CropEffect extends CropImageEffect implements ContainerFactoryPluginInterf
       $y = $position['y'] - $size['height'] / 2;
 
       if (!$image->crop($x, $y, $size['width'], $size['height'])) {
-        $this->logger->error('Manual image crop failed using the %toolkit toolkit on %path (%mimetype, %dimensions)', array(
+        $this->logger->error('Manual image crop failed using the %toolkit toolkit on %path (%mimetype, %dimensions)', [
             '%toolkit' => $image->getToolkitId(),
             '%path' => $image->getSource(),
             '%mimetype' => $image->getMimeType(),
             '%dimensions' => $image->getWidth() . 'x' . $image->getHeight()
-          ));
+          ]
+        );
         return FALSE;
       }
-    }
-    elseif ($this->configuration['automatic_crop']) {
-      return parent::applyEffect($image);
     }
 
     return TRUE;
@@ -119,7 +132,7 @@ class CropEffect extends CropImageEffect implements ContainerFactoryPluginInterf
    */
   public function defaultConfiguration() {
     return parent::defaultConfiguration() + [
-      'automatic_crop' => TRUE,
+      'crop_type' => NULL,
     ];
   }
 
@@ -127,49 +140,18 @@ class CropEffect extends CropImageEffect implements ContainerFactoryPluginInterf
    * {@inheritdoc}
    */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
-    $form = parent::buildConfigurationForm($form, $form_state);
+    $options = [];
+    foreach ($this->typeStorage->loadMultiple() as $type) {
+      $options[$type->id()] = $type->label();
+    }
 
-    $form['fallback'] = [
-      '#type' => 'fieldset',
-      '#title' => t('No manual crop behaviour'),
-      '#tree' => FALSE,
+    $form['crop_type'] = [
+      '#type' => 'select',
+      '#title' => t('Crop type'),
+      '#default_value' => $this->configuration['crop_type'],
+      '#options' => $options,
+      '#description' => t("Crop type to be used for the image style."),
     ];
-
-    $form['fallback']['automatic_crop'] = array(
-      '#type' => 'checkbox',
-      '#title' => t('Crop automatically'),
-      '#default_value' => $this->configuration['automatic_crop'],
-      '#description' => t("Crop automatically if no manual crop provided."),
-      '#parents' => ['data', 'automatic_crop'],
-    );
-
-    $form['fallback']['width'] = $form['width'];
-    $form['fallback']['width']['#parents'] = ['data', 'width'];
-    $form['fallback']['width']['#states'] = [
-      'visible' => [
-        ':input[name="data[automatic_crop]"]' => ['checked' => TRUE],
-      ],
-    ];
-
-    $form['fallback']['height'] = $form['height'];
-    $form['fallback']['height']['#parents'] = ['data', 'height'];
-    $form['fallback']['height']['#states'] = [
-      'visible' => [
-        ':input[name="data[automatic_crop]"]' => ['checked' => TRUE],
-      ],
-    ];
-
-    $form['fallback']['anchor'] = $form['anchor'];
-    $form['fallback']['anchor']['#parents'] = ['data', 'anchor'];
-    $form['fallback']['anchor']['#states'] = [
-      'visible' => [
-        ':input[name="data[automatic_crop]"]' => ['checked' => TRUE],
-      ],
-    ];
-
-    unset($form['anchor']);
-    unset($form['width']);
-    unset($form['height']);
 
     return $form;
   }
@@ -179,7 +161,7 @@ class CropEffect extends CropImageEffect implements ContainerFactoryPluginInterf
    */
   public function submitConfigurationForm(array &$form, FormStateInterface $form_state) {
     parent::submitConfigurationForm($form, $form_state);
-    $this->configuration['automatic_crop'] = $form_state->getValue('automatic_crop');
+    $this->configuration['crop_type'] = $form_state->getValue('crop_type');
   }
 
   /**
@@ -194,6 +176,7 @@ class CropEffect extends CropImageEffect implements ContainerFactoryPluginInterf
     if (!isset($this->crop)) {
       $ids = $this->query
         ->condition('uri', $image->getSource())
+        ->condition('type', $this->configuration['crop_type'])
         ->sort('cid')
         ->range(0, 1)
         ->execute();

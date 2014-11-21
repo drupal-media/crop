@@ -18,3 +18,13 @@ function crop_theme() {
     ),
   ];
 }
+
+/**
+ * Prepares variables for crop_crop summary template.
+ *
+ * Default template: crop-crop-summary.twig.html
+ */
+function template_preprocess_crop_crop_summary(&$variables) {
+  $type = \Drupal::entityManager()->getStorage('crop_type')->load($variables['data']['crop_type']);
+  $variables['data']['crop_type'] = $type->label();
+}
