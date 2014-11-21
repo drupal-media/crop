@@ -1,0 +1,18 @@
+crop.type.*:
+  type: config_entity
+  label: 'Crop type'
+  mapping:
+    label:
+      type: label
+      label: 'Name'
+    id:
+      type: string
+      label: 'Machine-readable name'
+    description:
+      type: text
+      label: 'Description'
+    third_party_settings:
+      type: sequence
+      label: 'Third party settings'
+      sequence:
+        - type: crop_type.third_party.[%key]
