@@ -36,4 +36,15 @@ interface CropInterface extends ContentEntityInterface {
    *   Array with two keys (x, y) and anchor coordinates as values.
    */
   public function anchor();
+
+  /**
+   * Gets entity provider for the crop.
+   *
+   * @return \Drupal\crop\EntityProviderInterface
+   *   Entity provider.
+   *
+   * @throws \Drupal\crop\EntityProviderNotFoundException
+   *   Thrown if entity provider not found.
+   */
+  public function provider();
 }

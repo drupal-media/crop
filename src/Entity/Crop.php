@@ -12,6 +12,7 @@ use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\crop\CropInterface;
+use Drupal\crop\EntityProviderNotFoundException;
 
 /**
  * Defines the crop entity class.
@@ -85,6 +86,20 @@ class Crop extends ContentEntityBase implements CropInterface {
       'width' => $this->width->value,
       'height' => $this->height->value,
     ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function provider() {
+    /** @var \Drupal\crop\EntityProviderManager $plugin_manager */
+    $plugin_manager = \Drupal::service('plugin.manager.crop.entity_provider');
+
+    if (!$plugin_manager->hasDefinition($this->entity_type->value)) {
+      throw new EntityProviderNotFoundException(t('Entity provider @id not found.', ['@id' => $this->entity_type->value]));
+    }
+
+    return $plugin_manager->createInstance($this->entity_type->value);
   }
 
   /**
