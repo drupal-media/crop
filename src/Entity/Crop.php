@@ -113,6 +113,13 @@ class Crop extends ContentEntityBase implements CropInterface {
     if (!$this->get('revision_uid')->entity) {
       $this->set('revision_uid', \Drupal::currentUser()->id());
     }
+
+    // Try to set URI if not yet defined.
+    if (empty($this->uri->value) && !empty($this->entity_type->value) && !empty($this->entity_id->value) ) {
+      if ($uri = $this->provider()->uri($this))  {
+        $this->set('uri', $uri);
+      }
+    }
   }
 
   /**
