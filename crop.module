@@ -13,9 +13,9 @@
  */
 function crop_theme() {
   return [
-    'crop_crop_summary' => array(
-      'variables' => array('data' => NULL, 'effect' => array()),
-    ),
+    'crop_crop_summary' => [
+      'variables' => ['data' => [], 'effect' => []],
+    ],
   ];
 }
 
@@ -25,6 +25,8 @@ function crop_theme() {
  * Default template: crop-crop-summary.twig.html
  */
 function template_preprocess_crop_crop_summary(&$variables) {
-  $type = \Drupal::entityManager()->getStorage('crop_type')->load($variables['data']['crop_type']);
-  $variables['data']['crop_type'] = $type->label();
+  if (!empty($variables['data']['crop_type'])) {
+    $type = \Drupal::entityManager()->getStorage('crop_type')->load($variables['data']['crop_type']);
+    $variables['data']['crop_type'] = $type->label();
+  }
 }
