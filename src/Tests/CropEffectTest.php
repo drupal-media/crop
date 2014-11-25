@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains \Drupal\crop\Tests\CropEffectTestBase.
+ * Contains \Drupal\crop\Tests\CropEffectTest.
  */
 
 namespace Drupal\crop\Tests;
