@@ -65,15 +65,16 @@ abstract class CropUnitTestBase extends KernelTestBase {
     $entity_manager->onEntityTypeCreate($entity_manager->getDefinition('crop'));
 
     // Create test image style
+    $uuid = $this->container->get('uuid')->generate();
     $this->testStyle = $this->imageStyleStorage->create([
       'name' => 'test',
       'label' => 'Test image style',
       'effects' => [
-        '69ad20fb-13b0-4e84-acaf-ddd91e7e15ac' => [
+        $uuid => [
           'id' => 'crop_crop',
           'data' => ['crop_type' => 'test_type'],
           'weight' => 0,
-          'uuid' => '69ad20fb-13b0-4e84-acaf-ddd91e7e15ac',
+          'uuid' => $uuid,
         ]
       ],
     ]);

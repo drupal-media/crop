@@ -90,16 +90,17 @@ class CropEffect extends ConfigurableImageEffectBase implements ContainerFactory
       return FALSE;
     }
 
-    if (($crop = $this->getCrop($image))) {
+    if ($crop = $this->getCrop($image)) {
       $anchor = $crop->anchor();
       $size = $crop->size();
 
       if (!$image->crop($anchor['x'], $anchor['y'], $size['width'], $size['height'])) {
-        $this->logger->error('Manual image crop failed using the %toolkit toolkit on %path (%mimetype, %dimensions)', [
+        $this->logger->error('Manual image crop failed using the %toolkit toolkit on %path (%mimetype, %width x %height)', [
             '%toolkit' => $image->getToolkitId(),
             '%path' => $image->getSource(),
             '%mimetype' => $image->getMimeType(),
-            '%dimensions' => $image->getWidth() . 'x' . $image->getHeight()
+            '%width' => $image->getWidth(),
+            '%height' => $image->getHeight(),
           ]
         );
         return FALSE;
@@ -145,7 +146,7 @@ class CropEffect extends ConfigurableImageEffectBase implements ContainerFactory
       '#title' => t('Crop type'),
       '#default_value' => $this->configuration['crop_type'],
       '#options' => $options,
-      '#description' => t("Crop type to be used for the image style."),
+      '#description' => t('Crop type to be used for the image style.'),
     ];
 
     return $form;
@@ -171,14 +172,14 @@ class CropEffect extends ConfigurableImageEffectBase implements ContainerFactory
     if (!isset($this->crop)) {
       $this->crop = FALSE;
 
-      $ids = $this->query
+      $id = $this->query
         ->condition('uri', $image->getSource())
         ->condition('type', $this->configuration['crop_type'])
         ->sort('cid')
         ->range(0, 1)
         ->execute();
 
-      if (!empty($ids) && ($crop = $this->storage->load(current($ids)))) {
+      if (!empty($id) && ($crop = $this->storage->load(current($id)))) {
         $this->crop = $crop;
       }
     }
