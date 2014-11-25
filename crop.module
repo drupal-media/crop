@@ -6,3 +6,27 @@
  *
  * Provides storage and API for image crops.
  */
+
+
+/**
+ * Implements hook_theme().
+ */
+function crop_theme() {
+  return [
+    'crop_crop_summary' => [
+      'variables' => ['data' => [], 'effect' => []],
+    ],
+  ];
+}
+
+/**
+ * Prepares variables for crop_crop summary template.
+ *
+ * Default template: crop-crop-summary.twig.html
+ */
+function template_preprocess_crop_crop_summary(&$variables) {
+  if (!empty($variables['data']['crop_type'])) {
+    $type = \Drupal::entityManager()->getStorage('crop_type')->load($variables['data']['crop_type']);
+    $variables['data']['crop_type'] = $type->label();
+  }
+}
