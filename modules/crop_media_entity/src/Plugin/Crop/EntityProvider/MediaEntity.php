@@ -1,10 +1,10 @@
 <?php
 
 /**
- * Contains \Drupal\crop\Plugin\EntityProvider\MediaEntity.
+ * Contains \Drupal\crop_media_entity\Plugin\EntityProvider\MediaEntity.
  */
 
-namespace Drupal\crop\Plugin\Crop\EntityProvider;
+namespace Drupal\crop_media_entity\Plugin\Crop\EntityProvider;
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityManagerInterface;
