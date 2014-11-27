@@ -21,14 +21,6 @@ class CropEffectTest extends CropUnitTestBase {
    */
   public static $modules = ['user', 'image', 'crop', 'file', 'system'];
 
-
-  protected function setUp() {
-    parent::setUp();
-
-    $this->container->get('entity.manager')
-      ->onEntityTypeCreate($this->container->get('entity.manager')->getDefinition('file'));
-  }
-
   /**
    * Tests manual crop image effect.
    */
