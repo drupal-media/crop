@@ -12,6 +12,7 @@ use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\crop\CropInterface;
+use Drupal\crop\EntityProviderNotFoundException;
 
 /**
  * Defines the crop entity class.
@@ -90,6 +91,20 @@ class Crop extends ContentEntityBase implements CropInterface {
   /**
    * {@inheritdoc}
    */
+  public function provider() {
+    /** @var \Drupal\crop\EntityProviderManager $plugin_manager */
+    $plugin_manager = \Drupal::service('plugin.manager.crop.entity_provider');
+
+    if (!$plugin_manager->hasDefinition($this->entity_type->value)) {
+      throw new EntityProviderNotFoundException(t('Entity provider @id not found.', ['@id' => $this->entity_type->value]));
+    }
+
+    return $plugin_manager->createInstance($this->entity_type->value);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function preSave(EntityStorageInterface $storage) {
     parent::preSave($storage);
 
@@ -97,6 +112,13 @@ class Crop extends ContentEntityBase implements CropInterface {
     // revision author.
     if (!$this->get('revision_uid')->entity) {
       $this->set('revision_uid', \Drupal::currentUser()->id());
+    }
+
+    // Try to set URI if not yet defined.
+    if (empty($this->uri->value) && !empty($this->entity_type->value) && !empty($this->entity_id->value) ) {
+      if ($uri = $this->provider()->uri($this))  {
+        $this->set('uri', $uri);
+      }
     }
   }
 

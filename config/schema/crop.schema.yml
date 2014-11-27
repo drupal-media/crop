@@ -16,3 +16,11 @@ crop.type.*:
       label: 'Third party settings'
       sequence:
         - type: crop_type.third_party.[%key]
+
+media_entity.bundle.third_party.crop:
+  type: mapping
+  label: 'Crop settings'
+  mapping:
+    image_field:
+      type: string
+      label: 'Field storing image to be cropped'
