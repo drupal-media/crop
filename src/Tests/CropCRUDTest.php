@@ -51,11 +51,15 @@ class CropCRUDTest extends CropUnitTestBase {
    * Tests crop save.
    */
   public function testCropSave() {
+    // Test file.
+    $file = $this->getTestFile();
+    $file->save();
+
     /** @var \Drupal\crop\CropInterface $crop */
     $values = [
       'type' => $this->cropType->id(),
-      'entity_id' => 1,
-      'entity_type' => 'file',
+      'entity_id' => $file->id(),
+      'entity_type' => $file->getEntityTypeId(),
       'x' => '100',
       'y' => '150',
       'width' => '200',
