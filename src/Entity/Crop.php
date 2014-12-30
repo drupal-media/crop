@@ -43,6 +43,7 @@ use Drupal\crop\EntityProviderNotFoundException;
  *     "id" = "cid",
  *     "bundle" = "type",
  *     "revision" = "vid",
+ *     "langcode" = "langcode",
  *     "uuid" = "uuid"
  *   },
  *   bundle_entity_type = "crop_type",
