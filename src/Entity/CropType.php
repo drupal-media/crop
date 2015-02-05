@@ -8,7 +8,6 @@
 namespace Drupal\crop\Entity;
 
 use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
-use Drupal\Core\Config\Entity\ThirdPartySettingsTrait;
 use Drupal\crop\CropTypeInterface;
 
 /**
@@ -39,7 +38,6 @@ use Drupal\crop\CropTypeInterface;
  * )
  */
 class CropType extends ConfigEntityBundleBase implements CropTypeInterface {
-  use ThirdPartySettingsTrait;
 
   /**
    * The machine name of this crop type.
