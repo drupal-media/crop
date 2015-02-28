@@ -32,8 +32,8 @@ use Drupal\crop\CropTypeInterface;
  *     "label" = "label"
  *   },
  *   links = {
- *     "edit-form" = "entity.crop_type.edit_form",
- *     "delete-form" = "entity.crop_type.delete_form"
+ *     "edit-form" = "/admin/structure/crop/manage/{crop_type}",
+ *     "delete-form" = "/admin/structure/crop/manage/{crop_type}/delete",
  *   }
  * )
  */

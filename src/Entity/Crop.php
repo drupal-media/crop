@@ -50,10 +50,6 @@ use Drupal\crop\EntityProviderNotFoundException;
  *   permission_granularity = "entity_type",
  *   admin_permission = "administer crop",
  *   links = {
- *     "canonical" = "",
- *     "delete-form" = "",
- *     "edit-form" = "",
- *     "admin-form" = ""
  *   }
  * )
  */
