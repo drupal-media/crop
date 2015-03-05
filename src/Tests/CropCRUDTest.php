@@ -21,7 +21,7 @@ class CropCRUDTest extends CropUnitTestBase {
    *
    * @var array
    */
-  public static $modules = ['user', 'image', 'crop', 'file'];
+  public static $modules = ['user', 'image', 'crop', 'file', 'system'];
 
   /**
    * Tests crop type save.

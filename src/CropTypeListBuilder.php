@@ -84,7 +84,7 @@ class CropTypeListBuilder extends ConfigEntityListBuilder {
    */
   public function render() {
     $build = parent::render();
-    $build['#empty'] = t('No crop types available. <a href="@link">Add crop type</a>.', array(
+    $build['table']['#empty'] = t('No crop types available. <a href="@link">Add crop type</a>.', array(
       '@link' => $this->urlGenerator->generateFromRoute('crop.type_add'),
     ));
     return $build;
