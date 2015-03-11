@@ -15,7 +15,7 @@ crop.type.*:
       type: sequence
       label: 'Third party settings'
       sequence:
-        - type: crop_type.third_party.[%key]
+        type: crop_type.third_party.[%key]
 
 media_entity.bundle.third_party.crop:
   type: mapping
