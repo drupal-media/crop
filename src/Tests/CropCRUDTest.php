@@ -7,7 +7,7 @@
 
 namespace Drupal\crop\Tests;
 
-use Drupal\Component\Utility\String;
+use Drupal\Component\Utility\SafeMarkup;
 
 /**
  * Tests the crop entity CRUD operations.
@@ -43,7 +43,7 @@ class CropCRUDTest extends CropUnitTestBase {
 
     $loaded = $this->container->get('config.factory')->get('crop.type.' . $values['id'])->get();
     foreach ($values as $key => $value) {
-      $this->assertEqual($loaded[$key], $value, String::format('Correct value for @field found.', ['@field' => $key]));
+      $this->assertEqual($loaded[$key], $value, SafeMarkup::format('Correct value for @field found.', ['@field' => $key]));
     }
   }
 
@@ -80,11 +80,11 @@ class CropCRUDTest extends CropUnitTestBase {
       switch ($key) {
         case 'image_style':
         case 'type':
-          $this->assertEqual($loaded_crop->{$key}->target_id, $value, String::format('Correct value for @field found.', ['@field' => $key]));
+          $this->assertEqual($loaded_crop->{$key}->target_id, $value, SafeMarkup::format('Correct value for @field found.', ['@field' => $key]));
           break;
 
         default:
-          $this->assertEqual($loaded_crop->{$key}->value, $value, String::format('Correct value for @field found.', ['@field' => $key]));
+          $this->assertEqual($loaded_crop->{$key}->value, $value, SafeMarkup::format('Correct value for @field found.', ['@field' => $key]));
           break;
       }
     }

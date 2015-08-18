@@ -7,7 +7,7 @@
 
 namespace Drupal\crop\Tests;
 
-use Drupal\Component\Utility\String;
+use Drupal\Component\Utility\SafeMarkup;
 use Drupal\simpletest\WebTestBase;
 
 /**
@@ -91,7 +91,7 @@ class CropFunctionalTest extends WebTestBase {
     $this->assertRaw(t('The crop type %name has been added.', ['%name' => $edit['label']]));
     $this->assertUrl('admin/structure/crop');
     $label = $this->xpath("//td[contains(concat(' ',normalize-space(@class),' '),' menu-label ')]");
-    $this->assert(strpos($label[0]->asXML(), String::checkPlain($edit['label'])) !== FALSE, 'Crop type label found on listing page.');
+    $this->assert(strpos($label[0]->asXML(), SafeMarkup::checkPlain($edit['label'])) !== FALSE, 'Crop type label found on listing page.');
     $this->assertText($edit['description']);
 
     // Check edit form.
@@ -104,13 +104,13 @@ class CropFunctionalTest extends WebTestBase {
     // See if crop type appears on image effect configuration form.
     $this->drupalGet('admin/config/media/image-styles/manage/' . $this->testStyle->id() . '/add/crop_crop');
     $option = $this->xpath("//select[@id='edit-data-crop-type']/option");
-    $this->assert(strpos($option[0]->asXML(), String::checkPlain($edit['label'])) !== FALSE, 'Crop type label found on image effect page.');
+    $this->assert(strpos($option[0]->asXML(), SafeMarkup::checkPlain($edit['label'])) !== FALSE, 'Crop type label found on image effect page.');
     $this->drupalPostForm('admin/config/media/image-styles/manage/' . $this->testStyle->id() . '/add/crop_crop', ['data[crop_type]' => $edit['id']], t('Add effect'));
     $this->assertText(t('The image effect was successfully applied.'));
     $this->assertText(t('Manual crop uses @name crop type', ['@name' => $edit['label']]));
     $this->testStyle = $this->container->get('entity.manager')->getStorage('image_style')->loadUnchanged($this->testStyle->id());
     $this->assertEqual($this->testStyle->getEffects()->count(), 1, 'One image effect added to test image style.');
-    $effect_configuration = $this->testStyle->getEffects()->current()->getConfiguration();
+    $effect_configuration = $this->testStyle->getEffects()->getIterator()->current()->getConfiguration();
     $this->assertEqual($effect_configuration['data'], ['crop_type' => $edit['id']], 'Manual crop effect uses correct image style.');
 
     // Try to access edit form as anonymous user.
