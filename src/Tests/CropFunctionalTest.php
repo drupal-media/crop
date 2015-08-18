@@ -110,7 +110,7 @@ class CropFunctionalTest extends WebTestBase {
     $this->assertText(t('Manual crop uses @name crop type', ['@name' => $edit['label']]));
     $this->testStyle = $this->container->get('entity.manager')->getStorage('image_style')->loadUnchanged($this->testStyle->id());
     $this->assertEqual($this->testStyle->getEffects()->count(), 1, 'One image effect added to test image style.');
-    $effect_configuration = $this->testStyle->getEffects()->current()->getConfiguration();
+    $effect_configuration = $this->testStyle->getEffects()->getIterator()->current()->getConfiguration();
     $this->assertEqual($effect_configuration['data'], ['crop_type' => $edit['id']], 'Manual crop effect uses correct image style.');
 
     // Try to access edit form as anonymous user.
