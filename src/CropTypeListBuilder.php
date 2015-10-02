@@ -62,7 +62,7 @@ class CropTypeListBuilder extends ConfigEntityListBuilder {
     $header['name'] = t('Name');
     $header['description'] = array(
       'data' => t('Description'),
-      'class' => array(RESPONSIVE_PRIORITY_MEDIUM),
+      'class' => [RESPONSIVE_PRIORITY_MEDIUM],
     );
     return $header + parent::buildHeader();
   }
@@ -73,7 +73,7 @@ class CropTypeListBuilder extends ConfigEntityListBuilder {
   public function buildRow(EntityInterface $entity) {
     $row['name'] = array(
       'data' => $this->getLabel($entity),
-      'class' => array('menu-label'),
+      'class' => ['menu-label'],
     );
     $row['description'] = Xss::filterAdmin($entity->description);
     return $row + parent::buildRow($entity);

@@ -139,6 +139,8 @@ class Crop extends ContentEntityBase implements CropInterface {
    * {@inheritdoc}
    */
   public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
+    $fields = [];
+
     $fields['cid'] = BaseFieldDefinition::create('integer')
       ->setLabel(t('Crop ID'))
       ->setDescription(t('The crop ID.'))
@@ -184,13 +186,14 @@ class Crop extends ContentEntityBase implements CropInterface {
     // given entity type. Saved here for performance reasons in image effects.
     // ---
     // TODO - we are not enforcing uniqueness on this as we want to support more
-    // crops per same image/image_style combination. However, image effect operates
-    // with image URI only, which means we have no mechanism to distinguish between
-    // multiple crops in there. If we really want to support multiple crops we'll
-    // need to override core at least in \Drupal\Core\Image\ImageFactory and
-    // \Drupal\Core\Image\Image. Let's leave this for now and simply load based
-    // on URI only. We can use some semi-smart approach in case there are multiple
-    // crops with same URI for now (first created, last created, ...).
+    // crops per same image/image_style combination. However, image effect
+    // operates with image URI only, which means we have no mechanism to
+    // distinguish between multiple crops in there. If we really want to
+    // support multiple crops we'll need to override core at least,
+    // in \Drupal\Core\Image\ImageFactory and \Drupal\Core\Image\Image.
+    // Let's leave this for now and simply load based on URI only.
+    // We can use some semi-smart approach in case there are multiple crops
+    // with same URI for now (first created, last created, ...).
     $fields['uri'] = BaseFieldDefinition::create('uri')
       ->setLabel(t('URI'))
       ->setDescription(t('The URI of the image crop belongs to.'))

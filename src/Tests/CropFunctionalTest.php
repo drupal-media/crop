@@ -45,12 +45,15 @@ class CropFunctionalTest extends WebTestBase {
    */
   protected $cropType;
 
+  /**
+   * {@inheritdoc}
+   */
   protected function setUp() {
     parent::setUp();
 
     $this->adminUser = $this->drupalCreateUser(['administer crop types', 'administer image styles']);
 
-    // Create test image style
+    // Create test image style.
     $this->testStyle = $this->container->get('entity.manager')->getStorage('image_style')->create([
       'name' => 'test',
       'label' => 'Test image style',
@@ -62,7 +65,7 @@ class CropFunctionalTest extends WebTestBase {
   /**
    * Tests crop type crud pages.
    */
-  public function testCropTypeCRUD() {
+  public function testCropTypeCrud() {
     // Anonymous users don't have access to crop type admin pages.
     $this->drupalGet('admin/structure/crop');
     $this->assertResponse(403);

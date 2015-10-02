@@ -50,6 +50,9 @@ abstract class CropUnitTestBase extends KernelTestBase {
    */
   protected $cropType;
 
+  /**
+   * {@inheritdoc}
+   */
   protected function setUp() {
     parent::setUp();
 
@@ -65,7 +68,7 @@ abstract class CropUnitTestBase extends KernelTestBase {
     $entity_manager->onEntityTypeCreate($entity_manager->getDefinition('crop'));
     $entity_manager->onEntityTypeCreate($entity_manager->getDefinition('file'));
 
-    // Create test image style
+    // Create test image style.
     $uuid = $this->container->get('uuid')->generate();
     $this->testStyle = $this->imageStyleStorage->create([
       'name' => 'test',
@@ -81,7 +84,7 @@ abstract class CropUnitTestBase extends KernelTestBase {
     ]);
     $this->testStyle->save();
 
-    // Create test crop type
+    // Create test crop type.
     $this->cropType = $this->cropTypeStorage->create([
       'id' => 'test_type',
       'label' => 'Test crop type',

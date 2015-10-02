@@ -24,7 +24,7 @@ function crop_theme() {
 /**
  * Prepares variables for crop_crop summary template.
  *
- * Default template: crop-crop-summary.twig.html
+ * Default template: crop-crop-summary.twig.html.
  */
 function template_preprocess_crop_crop_summary(&$variables) {
   if (!empty($variables['data']['crop_type'])) {

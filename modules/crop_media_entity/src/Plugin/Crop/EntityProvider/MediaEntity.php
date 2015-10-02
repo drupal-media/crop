@@ -1,6 +1,7 @@
 <?php
 
 /**
+ * @file
  * Contains \Drupal\crop_media_entity\Plugin\EntityProvider\MediaEntity.
  */
 

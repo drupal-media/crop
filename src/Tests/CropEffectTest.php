@@ -24,7 +24,7 @@ class CropEffectTest extends CropUnitTestBase {
   /**
    * Tests manual crop image effect.
    */
-  function testCropEffect() {
+  public function testCropEffect() {
     // Create image to be cropped.
     $file = $this->getTestFile();
     $file->save();
@@ -50,9 +50,9 @@ class CropEffectTest extends CropUnitTestBase {
 
     $this->assertTrue(file_exists($derivative_uri), 'Image derivative file exists on the filesystem.');
 
-    // Test if cropped version looks like expected. Basically loop pixels in derivative
-    // image and check if they look the same as pixels in corresponding region
-    // on original image.
+    // Test if cropped version looks like expected. Basically loop pixels,
+    // in derivative image and check if they look the same as pixels,
+    // in corresponding region on original image.
     $original_image = imagecreatefrompng($file->getFileUri());
     $derivative_image = imagecreatefrompng($derivative_uri);
     $orig_start = $crop->anchor();

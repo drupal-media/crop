@@ -37,7 +37,8 @@ class CropCRUDTest extends CropUnitTestBase {
     try {
       $crop_type->save();
       $this->assertTrue(TRUE, 'Crop type saved correctly.');
-    } catch (\Exception $exception) {
+    }
+    catch (\Exception $exception) {
       $this->assertTrue(FALSE, 'Crop type not saved correctly.');
     }
 
@@ -71,7 +72,8 @@ class CropCRUDTest extends CropUnitTestBase {
     try {
       $crop->save();
       $this->assertTrue(TRUE, 'Crop saved correctly.');
-    } catch (\Exception $exception) {
+    }
+    catch (\Exception $exception) {
       $this->assertTrue(FALSE, 'Crop not saved correctly.');
     }
 

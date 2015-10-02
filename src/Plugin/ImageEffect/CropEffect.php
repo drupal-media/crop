@@ -165,6 +165,7 @@ class CropEffect extends ConfigurableImageEffectBase implements ContainerFactory
    *
    * @param ImageInterface $image
    *   Image object.
+   *
    * @return \Drupal\Core\Entity\EntityInterface|\Drupal\crop\CropInterface|FALSE
    *   Crop entity or FALSE if crop doesn't exist.
    */

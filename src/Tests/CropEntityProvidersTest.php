@@ -23,7 +23,9 @@ class CropEntityProvidersTest extends CropUnitTestBase {
    */
   public static $modules = ['crop', 'file', 'image', 'user', 'system'];
 
-
+  /**
+   * {@inheritdoc}
+   */
   protected function setUp() {
     parent::setUp();
 
@@ -34,7 +36,7 @@ class CropEntityProvidersTest extends CropUnitTestBase {
   /**
    * Tests file provider plugin.
    */
-  function testCropEffect() {
+  public function testCropEffect() {
     $file = $this->getTestFile();
     $file->save();
 
@@ -57,7 +59,8 @@ class CropEntityProvidersTest extends CropUnitTestBase {
     try {
       $provider = $crop->provider();
       $this->assertTrue(TRUE, 'File entity provider plugin was found.');
-    } catch (EntityProviderNotFoundException $e) {
+    }
+    catch (EntityProviderNotFoundException $e) {
       $this->assertTrue(FALSE, 'File entity provider plugin was found.');
     }
 

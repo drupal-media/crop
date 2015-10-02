@@ -1,6 +1,7 @@
 <?php
 
 /**
+ * @file
  * Contains \Drupal\crop\Plugin\EntityProvider\File.
  */
 

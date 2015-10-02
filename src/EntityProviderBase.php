@@ -1,6 +1,7 @@
 <?php
 
 /**
+ * @file
  * Contains \Drupal\crop\EntityProviderBase.
  */
 
@@ -25,4 +26,5 @@ abstract class EntityProviderBase extends PluginBase implements EntityProviderIn
    * {@inheritdoc}
    */
   abstract public function uri(EntityInterface $entity);
+
 }

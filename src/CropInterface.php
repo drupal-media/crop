@@ -30,7 +30,7 @@ interface CropInterface extends ContentEntityInterface {
   public function size();
 
   /**
-   * Gets crop anchor (top-left corner of crop area)
+   * Gets crop anchor (top-left corner of crop area).
    *
    * @return array
    *   Array with two keys (x, y) and anchor coordinates as values.
@@ -47,4 +47,5 @@ interface CropInterface extends ContentEntityInterface {
    *   Thrown if entity provider not found.
    */
   public function provider();
+
 }

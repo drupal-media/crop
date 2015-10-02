@@ -27,8 +27,7 @@ class CropTypeForm extends EntityForm {
       $this->operation == 'add' ?
         $this->t('Add crop type')
         :
-        $form['#title'] = $this->t('Edit %label crop type', array('%label' => $type->label()))
-    ;
+        $form['#title'] = $this->t('Edit %label crop type', array('%label' => $type->label()));
 
     $form['label'] = [
       '#title' => t('Name'),
@@ -96,7 +95,8 @@ class CropTypeForm extends EntityForm {
 
     if ($status == SAVED_UPDATED) {
       drupal_set_message(t('The crop type %name has been updated.', $t_args));
-    } elseif ($status == SAVED_NEW) {
+    }
+    elseif ($status == SAVED_NEW) {
       drupal_set_message(t('The crop type %name has been added.', $t_args));
       $context = array_merge($t_args, array('link' => $this->l(t('View'), new Url('crop.overview_types'))));
       $this->logger('crop')->notice('Added crop type %name.', $context);
