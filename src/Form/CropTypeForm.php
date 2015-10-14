@@ -55,6 +55,13 @@ class CropTypeForm extends EntityForm {
       '#description' => t('Describe this crop type.'),
     ];
 
+    $form['aspect_ratio'] = [
+      '#title' => t('Aspect Ratio'),
+      '#type' => 'textfield',
+      '#default_value' => $type->aspect_ratio,
+      '#description' => t('Set aspect ratio like <b>16:9</b>'),
+    ];
+
     return $form;
   }
 
@@ -75,10 +82,17 @@ class CropTypeForm extends EntityForm {
     parent::validate($form, $form_state);
 
     $id = trim($form_state->getValue('id'));
+    $aspect_ratio = $form_state->getValue('aspect_ratio');
+
     // '0' is invalid, since elsewhere we check it using empty().
     if ($id == '0') {
       $form_state->setErrorByName('type', $this->t("Invalid machine-readable name. Enter a name other than %invalid.", array('%invalid' => $id)));
     }
+
+    if (!empty($aspect_ratio) && !preg_match("#^[0-9:]+$#", $aspect_ratio)) {
+      $form_state->setErrorByName('aspect_ratio', $this->t("Invalid format of aspect ratio. Enter a ratio in the format %format.", array('%format' => '<b>W:H</b>')));
+    }
+
   }
 
   /**
@@ -88,6 +102,7 @@ class CropTypeForm extends EntityForm {
     $type = $this->entity;
     $type->id = trim($type->id());
     $type->label = trim($type->label);
+    $type->aspect_ratio = trim($type->aspect_ratio);
 
     $status = $type->save();
 
