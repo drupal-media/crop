@@ -11,6 +11,9 @@ crop.type.*:
     description:
       type: text
       label: 'Description'
+    aspect_ratio:
+      type: string
+      label: 'Aspect ratio'
     third_party_settings:
       type: sequence
       label: 'Third party settings'

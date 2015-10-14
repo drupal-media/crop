@@ -9,6 +9,7 @@
 
 use \Drupal\Core\Form\FormStateInterface;
 use \Drupal\media_entity\MediaBundleInterface;
+use \Drupal\crop\Entity\CropType;
 
 /**
  * Implements hook_theme().
@@ -87,4 +88,34 @@ function crop_form_media_bundle_form_alter(&$form, FormStateInterface $form_stat
  */
 function crop_media_bundle_form_builder($entity_type, MediaBundleInterface $bundle, &$form, FormStateInterface $form_state) {
   $bundle->setThirdPartySetting('crop', 'image_field', $form_state->getValue('image_field'));
+}
+
+/**
+ * Returns a list of all the available crop types.
+ *
+ * This list can include types that are queued for addition or deletion.
+ *
+ * @return Drupal\crop\Entity\CropType
+ *   An array of crop type entities, keyed by ID.
+ *
+ * @deprecated in Drupal 8.x, will be removed before Drupal 9.0.
+ *   Use \Drupal\crop\Entity\CropType::loadMultiple().
+ *
+ */
+function crop_get_types() {
+  return CropType::loadMultiple();
+}
+
+/**
+ * Returns a list of available crop type names.
+ *
+ * This list can include types that are queued for addition or deletion.
+ *
+ * @return string[]
+ *   An array of crop type labels, keyed by the crop type name.
+ */
+function crop_type_get_names() {
+  return array_map(function ($bundle_info) {
+    return $bundle_info['label'];
+  }, \Drupal::entityManager()->getBundleInfo('crop'));
 }
