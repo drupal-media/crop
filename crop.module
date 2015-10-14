@@ -9,6 +9,7 @@
 
 use \Drupal\Core\Form\FormStateInterface;
 use \Drupal\media_entity\MediaBundleInterface;
+use \Drupal\crop\Entity\CropType;
 
 /**
  * Implements hook_theme().
@@ -87,4 +88,15 @@ function crop_form_media_bundle_form_alter(&$form, FormStateInterface $form_stat
  */
 function crop_media_bundle_form_builder($entity_type, MediaBundleInterface $bundle, &$form, FormStateInterface $form_state) {
   $bundle->setThirdPartySetting('crop', 'image_field', $form_state->getValue('image_field'));
+}
+
+/**
+ * Entity builder for Media bundle.
+ *
+ * Adds third party settings to Media bundle config entity.
+ *
+ * @see crop_form_media_bundle_form_alter()
+ */
+function crop_get_types() {
+  return CropType::loadMultiple();
 }

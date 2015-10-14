@@ -29,7 +29,10 @@ use Drupal\crop\CropTypeInterface;
  *   bundle_of = "crop",
  *   entity_keys = {
  *     "id" = "id",
- *     "label" = "label"
+ *     "label" = "label",
+ *   },
+ *   config_export = {
+ *     "aspect_ratio",
  *   },
  *   links = {
  *     "edit-form" = "/admin/structure/crop/manage/{crop_type}",
@@ -59,6 +62,13 @@ class CropType extends ConfigEntityBundleBase implements CropTypeInterface {
    * @var string
    */
   public $description;
+
+  /**
+   * A brief description of this crop type.
+   *
+   * @var string
+   */
+  public $aspect_ratio;
 
   /**
    * {@inheritdoc}
