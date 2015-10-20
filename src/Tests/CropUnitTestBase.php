@@ -8,7 +8,7 @@
 namespace Drupal\crop\Tests;
 
 use Drupal\Core\StreamWrapper\PublicStream;
-use Drupal\simpletest\KernelTestBase;
+use Drupal\KernelTests\KernelTestBase;
 
 /**
  * Tests the crop entity CRUD operations.
