@@ -20,4 +20,15 @@ interface CropTypeInterface extends ConfigEntityInterface {
    *   The aspect ratio of this crop type.
    */
   public function getAspectRatio();
+
+  /**
+   * Returns a list of available crop type names.
+   *
+   * This list can include types that are queued for addition or deletion.
+   *
+   * @return string[]
+   *   An array of crop type labels, keyed by the crop type name.
+   */
+  public static function getCropTypeNames();
+
 }

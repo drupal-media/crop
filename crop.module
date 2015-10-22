@@ -88,17 +88,3 @@ function crop_form_media_bundle_form_alter(&$form, FormStateInterface $form_stat
 function crop_media_bundle_form_builder($entity_type, MediaBundleInterface $bundle, &$form, FormStateInterface $form_state) {
   $bundle->setThirdPartySetting('crop', 'image_field', $form_state->getValue('image_field'));
 }
-
-/**
- * Returns a list of available crop type names.
- *
- * This list can include types that are queued for addition or deletion.
- *
- * @return string[]
- *   An array of crop type labels, keyed by the crop type name.
- */
-function crop_type_get_names() {
-  return array_map(function ($bundle_info) {
-    return $bundle_info['label'];
-  }, \Drupal::entityManager()->getBundleInfo('crop'));
-}

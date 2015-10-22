@@ -81,4 +81,13 @@ class CropType extends ConfigEntityBundleBase implements CropTypeInterface {
     return $this->aspect_ratio;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public static function getCropTypeNames() {
+    return array_map(function ($bundle_info) {
+      return $bundle_info['label'];
+    }, \Drupal::entityManager()->getBundleInfo('crop'));
+  }
+
 }

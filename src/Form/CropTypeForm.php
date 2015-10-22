@@ -59,7 +59,8 @@ class CropTypeForm extends EntityForm {
       '#title' => t('Aspect Ratio'),
       '#type' => 'textfield',
       '#default_value' => $type->aspect_ratio,
-      '#description' => t('Set an aspect ratio eg: <b>16:9</b>, if you set this at (0:0) or empty the crop zone is free.'),
+      '#attributes' => ['placeholder' => 'W:H'],
+      '#description' => t('Set an aspect ratio <b>eg: 16:9</b> or leave this empty for arbitrary aspect ratio'),
     ];
 
     return $form;
@@ -91,7 +92,7 @@ class CropTypeForm extends EntityForm {
 
     // If aspect ratio is set verify format.
     if (!empty($aspect_ratio) && !preg_match("#^[0-9:]+$#", $aspect_ratio)) {
-      $form_state->setErrorByName('aspect_ratio', $this->t("Invalid format of aspect ratio. Enter a ratio in the format %format.", array('%format' => 'W:H')));
+      $form_state->setErrorByName('aspect_ratio', $this->t("Invalid format of aspect ratio. Enter a ratio in format %format.", array('%format' => 'W:H')));
     }
   }
 
