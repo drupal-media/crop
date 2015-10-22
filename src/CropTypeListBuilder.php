@@ -59,11 +59,12 @@ class CropTypeListBuilder extends ConfigEntityListBuilder {
    * {@inheritdoc}
    */
   public function buildHeader() {
+    $header = [];
     $header['name'] = t('Name');
-    $header['description'] = array(
+    $header['description'] = [
       'data' => t('Description'),
       'class' => [RESPONSIVE_PRIORITY_MEDIUM],
-    );
+    ];
     return $header + parent::buildHeader();
   }
 
@@ -71,10 +72,11 @@ class CropTypeListBuilder extends ConfigEntityListBuilder {
    * {@inheritdoc}
    */
   public function buildRow(EntityInterface $entity) {
-    $row['name'] = array(
+    $row = [];
+    $row['name'] = [
       'data' => $this->getLabel($entity),
       'class' => ['menu-label'],
-    );
+    ];
     $row['description'] = Xss::filterAdmin($entity->description);
     return $row + parent::buildRow($entity);
   }
@@ -84,9 +86,9 @@ class CropTypeListBuilder extends ConfigEntityListBuilder {
    */
   public function render() {
     $build = parent::render();
-    $build['table']['#empty'] = t('No crop types available. <a href="@link">Add crop type</a>.', array(
+    $build['table']['#empty'] = t('No crop types available. <a href="@link">Add crop type</a>.', [
       '@link' => $this->urlGenerator->generateFromRoute('crop.type_add'),
-    ));
+    ]);
     return $build;
   }
 

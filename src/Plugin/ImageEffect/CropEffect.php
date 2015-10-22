@@ -114,10 +114,10 @@ class CropEffect extends ConfigurableImageEffectBase implements ContainerFactory
    * {@inheritdoc}
    */
   public function getSummary() {
-    $summary = array(
+    $summary = [
       '#theme' => 'crop_crop_summary',
       '#data' => $this->configuration,
-    );
+    ];
     $summary += parent::getSummary();
 
     return $summary;
