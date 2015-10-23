@@ -13,6 +13,14 @@ use Drupal\Core\Config\Entity\ConfigEntityInterface;
  * Provides an interface defining a crop type entity.
  */
 interface CropTypeInterface extends ConfigEntityInterface {
+
+  /**
+   * Aspect ratio validation regexp.
+   *
+   * @var array
+   */
+  const VALIDATION_REGEXP = '#^[0-9:]+$#';
+
   /**
    * Get aspect ratio of this crop type.
    *
