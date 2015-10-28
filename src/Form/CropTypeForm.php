@@ -10,6 +10,8 @@ namespace Drupal\crop\Form;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\crop\Plugin\Validation\Constraint\RatioValidationConstraint;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 /**
  * Form controller for crop type forms.
@@ -45,6 +47,8 @@ class CropTypeForm extends EntityForm {
         'exists' => ['\Drupal\crop\Entity\CropType', 'load'],
         'source' => ['label'],
       ],
+      // A crop type's machine name cannot be changed.
+      '#disabled' => !$type->isNew(),
       '#description' => t('A unique machine-readable name for this crop type. It must only contain lowercase letters, numbers, and underscores.'),
     ];
 
@@ -82,17 +86,33 @@ class CropTypeForm extends EntityForm {
   public function validateForm(array &$form, FormStateInterface $form_state) {
     parent::validateForm($form, $form_state);
 
-    $id = trim($form_state->getValue('id'));
-    $aspect_ratio = $form_state->getValue('aspect_ratio');
+    $entity = $this->buildEntity($form, $form_state);
+    $violations = $entity->validate();
 
-    // '0' is invalid, since elsewhere we check it using empty().
-    if ($id == '0') {
-      $form_state->setErrorByName('type', $this->t("Invalid machine-readable name. Enter a name other than %invalid.", array('%invalid' => $id)));
-    }
+    $this->flagViolations($violations, $form, $form_state);
+  }
 
-    // If aspect ratio is set verify format.
-    if (!empty($aspect_ratio) && !preg_match("#^[0-9:]+$#", $aspect_ratio)) {
-      $form_state->setErrorByName('aspect_ratio', $this->t("Invalid format of aspect ratio. Enter a ratio in format %format.", array('%format' => 'W:H')));
+  /**
+   * Flags violations for the current form.
+   *
+   * @param \Symfony\Component\Validator\ConstraintViolationListInterface $violations
+   *   The violations to flag.
+   *
+   * @param array $form
+   *   A nested array of form elements comprising the form.
+   *
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current state of the form.
+   */
+  protected function flagViolations(ConstraintViolationListInterface $violations, array $form, FormStateInterface $form_state) {
+    // Manually flag violations of fields not handled by the form display.
+    foreach ($violations->getIterator() as $violation) {
+      if ($violation->getPropertyPath() == 'aspect_ratio') {
+        $form_state->setErrorByName('aspect_ratio', $violation->getMessage());
+      }
+      if ($violation->getPropertyPath() == 'id') {
+        $form_state->setErrorByName('id', $violation->getMessage());
+      }
     }
   }
 

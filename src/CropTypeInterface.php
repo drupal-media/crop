@@ -19,7 +19,7 @@ interface CropTypeInterface extends ConfigEntityInterface {
    *
    * @var array
    */
-  const VALIDATION_REGEXP = '#^[0-9:]+$#';
+  const VALIDATION_REGEXP = '#^[0-9]+:[0-9]+$#';
 
   /**
    * Get aspect ratio of this crop type.

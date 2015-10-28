@@ -8,7 +8,9 @@
 namespace Drupal\crop\Entity;
 
 use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
+use Drupal\Core\Entity\EntityConstraintViolationList;
 use Drupal\crop\CropTypeInterface;
+use Symfony\Component\Validator\ConstraintViolationList;
 
 /**
  * Defines the Crop type configuration entity.
@@ -34,10 +36,13 @@ use Drupal\crop\CropTypeInterface;
  *   links = {
  *     "edit-form" = "/admin/structure/crop/manage/{crop_type}",
  *     "delete-form" = "/admin/structure/crop/manage/{crop_type}/delete",
+ *   },
+ *   constraints = {
+ *     "CropTypeValidation" = {},
  *   }
  * )
  */
-class CropType extends ConfigEntityBundleBase implements CropTypeInterface {
+class CropType extends ConfigEntityBundleBase implements \IteratorAggregate, CropTypeInterface {
 
   /**
    * The machine name of this crop type.
@@ -79,6 +84,25 @@ class CropType extends ConfigEntityBundleBase implements CropTypeInterface {
    */
   public function getAspectRatio() {
     return $this->aspect_ratio;
+  }
+
+  /**
+   * Validates the currently set values.
+   *
+   * @return \Symfony\Component\Validator\ConstraintViolationListInterface
+   *   A list of constraint violations. If the list is empty, validation
+   *   succeeded.
+   */
+  public function validate() {
+    $violations = $this->getTypedData()->validate();
+    return new ConstraintViolationList(iterator_to_array($violations));
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getIterator() {
+    return new \ArrayIterator();
   }
 
   /**
