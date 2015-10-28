@@ -7,7 +7,6 @@
 
 namespace Drupal\crop\Plugin\Validation\Constraint;
 
-use Drupal\crop\Entity\CropType;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
@@ -25,11 +24,9 @@ class CropTypeValidationConstraintValidator extends ConstraintValidator {
 
   /**
    * {@inheritdoc}
-   *
-   * @param \Drupal\crop\Entity\CropType $value
    */
   public function validate($value, Constraint $constraint) {
-
+    /** @var \Drupal\crop\Entity\CropType $value */
     $id = trim($value->id());
     // '0' is invalid, since elsewhere we check it using empty().
     if ($id == '0') {

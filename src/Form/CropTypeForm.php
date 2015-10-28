@@ -25,11 +25,9 @@ class CropTypeForm extends EntityForm {
     $form = parent::form($form, $form_state);
 
     $type = $this->entity;
-    $form['#title'] =
-      $this->operation == 'add' ?
-        $this->t('Add crop type')
+    $form['#title'] = $this->operation == 'add' ? $this->t('Add crop type')
         :
-        $form['#title'] = $this->t('Edit %label crop type', array('%label' => $type->label()));
+        $this->t('Edit %label crop type', array('%label' => $type->label()));
 
     $form['label'] = [
       '#title' => t('Name'),
@@ -86,6 +84,7 @@ class CropTypeForm extends EntityForm {
   public function validateForm(array &$form, FormStateInterface $form_state) {
     parent::validateForm($form, $form_state);
 
+    /** @var \Drupal\crop\Entity\CropType $entity */
     $entity = $this->buildEntity($form, $form_state);
     $violations = $entity->validate();
 
@@ -97,10 +96,8 @@ class CropTypeForm extends EntityForm {
    *
    * @param \Symfony\Component\Validator\ConstraintViolationListInterface $violations
    *   The violations to flag.
-   *
    * @param array $form
    *   A nested array of form elements comprising the form.
-   *
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current state of the form.
    */

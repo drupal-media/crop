@@ -87,11 +87,7 @@ class CropType extends ConfigEntityBundleBase implements \IteratorAggregate, Cro
   }
 
   /**
-   * Validates the currently set values.
-   *
-   * @return \Symfony\Component\Validator\ConstraintViolationListInterface
-   *   A list of constraint violations. If the list is empty, validation
-   *   succeeded.
+   * {@inheritdoc}
    */
   public function validate() {
     $violations = $this->getTypedData()->validate();

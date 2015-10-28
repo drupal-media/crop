@@ -39,4 +39,13 @@ interface CropTypeInterface extends ConfigEntityInterface {
    */
   public static function getCropTypeNames();
 
+  /**
+   * Validates the currently set values.
+   *
+   * @return \Symfony\Component\Validator\ConstraintViolationListInterface
+   *   A list of constraint violations. If the list is empty, validation
+   *   succeeded.
+   */
+  public function validate();
+
 }
