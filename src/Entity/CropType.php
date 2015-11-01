@@ -38,7 +38,8 @@ use Symfony\Component\Validator\ConstraintViolationList;
  *     "delete-form" = "/admin/structure/crop/manage/{crop_type}/delete",
  *   },
  *   constraints = {
- *     "CropTypeValidation" = {},
+ *     "CropTypeMachineNameValidation" = {},
+ *     "CropTypeAspectRatioValidation" = {},
  *   }
  * )
  */
@@ -105,9 +106,10 @@ class CropType extends ConfigEntityBundleBase implements \IteratorAggregate, Cro
    * {@inheritdoc}
    */
   public static function getCropTypeNames() {
-    return array_map(function ($bundle_info) {
-      return $bundle_info['label'];
-    }, \Drupal::entityManager()->getBundleInfo('crop'));
+    return array_map(
+      function ($bundle_info) { return $bundle_info['label'];},
+      \Drupal::entityManager()->getBundleInfo('crop')
+    );
   }
 
 }
