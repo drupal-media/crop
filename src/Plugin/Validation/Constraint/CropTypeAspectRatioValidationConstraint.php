@@ -24,6 +24,6 @@ class CropTypeAspectRatioValidationConstraint extends Constraint {
    *
    * @var string
    */
-  public $message = 'Invalid format of aspect ratio. Enter a ratio in format H:W.';
+  public $message = 'Invalid aspect ratio format. Should be defined in H:W form.';
 
 }

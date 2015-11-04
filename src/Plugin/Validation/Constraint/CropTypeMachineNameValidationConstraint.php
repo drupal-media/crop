@@ -24,6 +24,6 @@ class CropTypeMachineNameValidationConstraint extends Constraint {
    *
    * @var string
    */
-  public $message = 'Invalid machine-readable name. Enter a name other than "0".';
+  public $message = 'Invalid machine-readable name.';
 
 }

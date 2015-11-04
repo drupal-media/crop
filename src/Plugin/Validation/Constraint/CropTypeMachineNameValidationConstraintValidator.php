@@ -24,8 +24,6 @@ class CropTypeMachineNameValidationConstraintValidator extends ConstraintValidat
 
   /**
    * {@inheritdoc}
-   *
-   * @param \Drupal\crop\Entity\CropType $value
    */
   public function validate($value, Constraint $constraint) {
     // '0' is invalid, since elsewhere we check it using empty().
