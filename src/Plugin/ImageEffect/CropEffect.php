@@ -8,7 +8,6 @@
 namespace Drupal\crop\Plugin\ImageEffect;
 
 use Drupal\Core\Config\Entity\ConfigEntityStorageInterface;
-use Drupal\Core\Entity\Query\QueryInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Image\ImageInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -43,13 +42,6 @@ class CropEffect extends ConfigurableImageEffectBase implements ContainerFactory
   protected $typeStorage;
 
   /**
-   * Crop entity query.
-   *
-   * @var \Drupal\Core\Entity\Query\QueryInterface
-   */
-  protected $query;
-
-  /**
    * Crop entity.
    *
    * @var \Drupal\crop\CropInterface
@@ -59,11 +51,10 @@ class CropEffect extends ConfigurableImageEffectBase implements ContainerFactory
   /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerInterface $logger, CropStorageInterface $crop_storage, ConfigEntityStorageInterface $crop_type_storage, QueryInterface $storage_query) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerInterface $logger, CropStorageInterface $crop_storage, ConfigEntityStorageInterface $crop_type_storage) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $logger);
     $this->storage = $crop_storage;
     $this->typeStorage = $crop_type_storage;
-    $this->query = $storage_query;
   }
 
   /**
@@ -76,8 +67,7 @@ class CropEffect extends ConfigurableImageEffectBase implements ContainerFactory
       $plugin_definition,
       $container->get('logger.factory')->get('image'),
       $container->get('entity.manager')->getStorage('crop'),
-      $container->get('entity.manager')->getStorage('crop_type'),
-      $container->get('entity.query')->get('crop')
+      $container->get('entity.manager')->getStorage('crop_type')
     );
   }
 
@@ -173,7 +163,7 @@ class CropEffect extends ConfigurableImageEffectBase implements ContainerFactory
     if (!isset($this->crop)) {
       $this->crop = FALSE;
 
-      $id = $this->query
+      $id = $this->storage->getQuery()
         ->condition('uri', $image->getSource())
         ->condition('type', $this->configuration['crop_type'])
         ->sort('cid')
