@@ -65,6 +65,9 @@ class CropTypeListBuilder extends ConfigEntityListBuilder {
       'data' => t('Description'),
       'class' => [RESPONSIVE_PRIORITY_MEDIUM],
     ];
+    $header['aspect_ratio'] = [
+      'data' => t('Aspect Ratio'),
+    ];
     return $header + parent::buildHeader();
   }
 
@@ -78,6 +81,7 @@ class CropTypeListBuilder extends ConfigEntityListBuilder {
       'class' => ['menu-label'],
     ];
     $row['description'] = Xss::filterAdmin($entity->description);
+    $row['aspect_ratio'] = $entity->getAspectRatio();
     return $row + parent::buildRow($entity);
   }
 
