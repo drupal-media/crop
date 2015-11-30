@@ -39,7 +39,6 @@ class CropEffectTest extends CropUnitTestBase {
       'y' => '120',
       'width' => '50',
       'height' => '50',
-      'image_style' => $this->testStyle->id(),
     ];
     /** @var \Drupal\crop\CropInterface $crop */
     $crop = $this->container->get('entity.manager')->getStorage('crop')->create($values);

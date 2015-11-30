@@ -201,13 +201,6 @@ class Crop extends ContentEntityBase implements CropInterface {
       ->setTranslatable(TRUE)
       ->setSetting('max_length', 255);
 
-    $fields['image_style'] = BaseFieldDefinition::create('entity_reference')
-      ->setLabel(t('Image style'))
-      ->setDescription(t('The image style crop relates to.'))
-      ->setRevisionable(TRUE)
-      ->setSetting('target_type', 'image_style')
-      ->setReadOnly(TRUE);
-
     $fields['height'] = BaseFieldDefinition::create('integer')
       ->setLabel(t('Height'))
       ->setDescription(t('The crop height.'))

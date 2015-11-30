@@ -65,7 +65,6 @@ class CropCRUDTest extends CropUnitTestBase {
       'y' => '150',
       'width' => '200',
       'height' => '250',
-      'image_style' => $this->testStyle->id(),
     ];
     $crop = $this->cropStorage->create($values);
 
@@ -80,7 +79,6 @@ class CropCRUDTest extends CropUnitTestBase {
     $loaded_crop = $this->cropStorage->loadUnchanged(1);
     foreach ($values as $key => $value) {
       switch ($key) {
-        case 'image_style':
         case 'type':
           $this->assertEqual($loaded_crop->{$key}->target_id, $value, SafeMarkup::format('Correct value for @field found.', ['@field' => $key]));
           break;
