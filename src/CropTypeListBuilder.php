@@ -68,6 +68,7 @@ class CropTypeListBuilder extends ConfigEntityListBuilder {
     $header['aspect_ratio'] = [
       'data' => t('Aspect Ratio'),
     ];
+    $header['usage'] = $this->t('Used in');
     return $header + parent::buildHeader();
   }
 
@@ -82,8 +83,24 @@ class CropTypeListBuilder extends ConfigEntityListBuilder {
     ];
     $row['description'] = Xss::filterAdmin($entity->description);
     $row['aspect_ratio'] = $entity->getAspectRatio();
+
+    // Load all image styles where the current crop type is used.
+    $usage = array();
+    $image_style_ids = \Drupal::entityQuery('image_style')->condition('effects.*.data.crop_type', $entity->id())->execute();
+    $image_styles = entity_load_multiple('image_style', $image_style_ids);
+    /** @var \Drupal\image\Entity\ImageStyle $image_style */
+    foreach ($image_styles as $image_style) {
+      $usage[] = \Drupal::l($image_style->label(), $image_style->urlInfo());
+    }
+    $row['usage']['data'] = [
+      '#theme' => 'item_list',
+      '#items' => $usage,
+      '#context' => ['list_style' => 'comma-list'],
+    ];
+
     return $row + parent::buildRow($entity);
   }
+
 
   /**
    * {@inheritdoc}

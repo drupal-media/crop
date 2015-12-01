@@ -128,6 +128,7 @@ class CropFunctionalTest extends WebTestBase {
 
     // Delete crop type.
     $this->drupalGet('admin/structure/crop');
+    $this->assertLink('Test image style');
     $this->clickLink(t('Delete'));
     $this->assertText(t('Are you sure you want to delete the crop type @name?', ['@name' => $edit['label']]));
     $this->drupalPostForm('admin/structure/crop/manage/' . $edit['id'] . '/delete', [], t('Delete'));
