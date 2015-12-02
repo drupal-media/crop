@@ -8,12 +8,14 @@
 namespace Drupal\crop;
 
 use Drupal\Core\Config\Entity\ConfigEntityListBuilder;
+use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Routing\UrlGeneratorInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Component\Utility\Xss;
+use Drupal\image\Entity\ImageStyle;
 
 /**
  * Defines a class to build a listing of crop type entities.
@@ -30,6 +32,13 @@ class CropTypeListBuilder extends ConfigEntityListBuilder {
   protected $urlGenerator;
 
   /**
+   * The entity query factory.
+   *
+   * @var \Drupal\Core\Entity\Query\QueryFactory
+   */
+  protected $queryFactory;
+
+  /**
    * Constructs a CropTypeListBuilder object.
    *
    * @param \Drupal\Core\Entity\EntityTypeInterface $entity_type
@@ -38,10 +47,13 @@ class CropTypeListBuilder extends ConfigEntityListBuilder {
    *   The entity storage class.
    * @param \Drupal\Core\Routing\UrlGeneratorInterface $url_generator
    *   The url generator service.
+   * @param \Drupal\Core\Entity\Query\QueryFactory $query_factory
+   *   The entity query factory.
    */
-  public function __construct(EntityTypeInterface $entity_type, EntityStorageInterface $storage, UrlGeneratorInterface $url_generator) {
+  public function __construct(EntityTypeInterface $entity_type, EntityStorageInterface $storage, UrlGeneratorInterface $url_generator, QueryFactory $query_factory) {
     parent::__construct($entity_type, $storage);
     $this->urlGenerator = $url_generator;
+    $this->queryFactory = $query_factory;
   }
 
   /**
@@ -51,7 +63,8 @@ class CropTypeListBuilder extends ConfigEntityListBuilder {
     return new static(
       $entity_type,
       $container->get('entity.manager')->getStorage($entity_type->id()),
-      $container->get('url_generator')
+      $container->get('url_generator'),
+      $container->get('entity.query')
     );
   }
 
@@ -86,8 +99,8 @@ class CropTypeListBuilder extends ConfigEntityListBuilder {
 
     // Load all image styles where the current crop type is used.
     $usage = array();
-    $image_style_ids = \Drupal::entityQuery('image_style')->condition('effects.*.data.crop_type', $entity->id())->execute();
-    $image_styles = entity_load_multiple('image_style', $image_style_ids);
+    $image_style_ids = $this->queryFactory->get('image_style')->condition('effects.*.data.crop_type', $entity->id())->execute();
+    $image_styles = ImageStyle::loadMultiple($image_style_ids);
     /** @var \Drupal\image\Entity\ImageStyle $image_style */
     foreach ($image_styles as $image_style) {
       $usage[] = \Drupal::l($image_style->label(), $image_style->urlInfo());
