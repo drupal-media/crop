@@ -39,6 +39,13 @@ class CropTypeListBuilder extends ConfigEntityListBuilder {
   protected $queryFactory;
 
   /**
+   * The list of image styles using crop plugin.
+   *
+   * @var \Drupal\image\Entity\ImageStyle[]
+   */
+  protected $cropImageStyles;
+
+  /**
    * Constructs a CropTypeListBuilder object.
    *
    * @param \Drupal\Core\Entity\EntityTypeInterface $entity_type
@@ -71,6 +78,17 @@ class CropTypeListBuilder extends ConfigEntityListBuilder {
   /**
    * {@inheritdoc}
    */
+  public function load() {
+    // Load all image styles that are using crop plugin.
+    $image_style_ids = $this->queryFactory->get('image_style')->condition('effects.*.id', 'crop_crop')->execute();
+    $this->cropImageStyles = ImageStyle::loadMultiple($image_style_ids);
+
+    return parent::load();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function buildHeader() {
     $header = [];
     $header['name'] = t('Name');
@@ -97,19 +115,34 @@ class CropTypeListBuilder extends ConfigEntityListBuilder {
     $row['description'] = Xss::filterAdmin($entity->description);
     $row['aspect_ratio'] = $entity->getAspectRatio();
 
-    // Load all image styles where the current crop type is used.
-    $usage = array();
-    $image_style_ids = $this->queryFactory->get('image_style')->condition('effects.*.data.crop_type', $entity->id())->execute();
-    $image_styles = ImageStyle::loadMultiple($image_style_ids);
+    // Find the used image styles for the current crop type.
     /** @var \Drupal\image\Entity\ImageStyle $image_style */
-    foreach ($image_styles as $image_style) {
-      $usage[] = \Drupal::l($image_style->label(), $image_style->urlInfo());
+    $image_styles = [];
+    $usage = [];
+    foreach ($this->cropImageStyles as $image_style) {
+      /** @var \Drupal\image\ImageEffectInterface $effect */
+      foreach ($image_style->getEffects() as $effect) {
+       if (isset($effect->getConfiguration()['data']['crop_type'])) {
+         $crop_type = $effect->getConfiguration()['data']['crop_type'];
+         if ($crop_type == $entity->id()) {
+           // Add two image styles into the usage list.
+           if (count($image_styles) < 2) {
+             $usage[] = $image_style->link();
+           }
+           $image_styles[] = $image_style;
+         }
+       }
+      }
     }
-    $row['usage']['data'] = [
-      '#theme' => 'item_list',
-      '#items' => $usage,
-      '#context' => ['list_style' => 'comma-list'],
-    ];
+
+    $other_image_styles = array_splice($image_styles, 2);
+    if ($other_image_styles) {
+      $usage_message = t('@first, @second and @count more', ['@first' => $usage[0], '@second' => $usage[1], '@count' => count($other_image_styles)]);
+    }
+    else {
+      $usage_message = implode(', ', $usage);
+    }
+    $row['usage']['data']['#markup'] = $usage_message;
 
     return $row + parent::buildRow($entity);
   }
