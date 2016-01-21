@@ -12,6 +12,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Image\ImageInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\crop\CropStorageInterface;
+use Drupal\crop\Entity\Crop;
 use Drupal\image\ConfigurableImageEffectBase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -162,15 +163,7 @@ class CropEffect extends ConfigurableImageEffectBase implements ContainerFactory
   protected function getCrop(ImageInterface $image) {
     if (!isset($this->crop)) {
       $this->crop = FALSE;
-
-      $id = $this->storage->getQuery()
-        ->condition('uri', $image->getSource())
-        ->condition('type', $this->configuration['crop_type'])
-        ->sort('cid')
-        ->range(0, 1)
-        ->execute();
-
-      if (!empty($id) && ($crop = $this->storage->load(current($id)))) {
+      if ($crop = Crop::findCrop($image->getSource(), $this->configuration['crop_type'])) {
         $this->crop = $crop;
       }
     }

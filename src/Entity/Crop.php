@@ -60,9 +60,19 @@ class Crop extends ContentEntityBase implements CropInterface {
    */
   public function position() {
     return [
-      'x' => $this->x->value,
-      'y' => $this->y->value,
+      'x' => (int) $this->x->value,
+      'y' => (int) $this->y->value,
     ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setPosition($x, $y) {
+    $this->x = $x;
+    $this->y = $y;
+
+    return $this;
   }
 
   /**
@@ -70,8 +80,8 @@ class Crop extends ContentEntityBase implements CropInterface {
    */
   public function anchor() {
     return [
-      'x' => $this->x->value - ($this->width->value / 2),
-      'y' => $this->y->value - ($this->height->value / 2),
+      'x' => (int) ($this->x->value - ($this->width->value / 2)),
+      'y' => (int) ($this->y->value - ($this->height->value / 2)),
     ];
   }
 
@@ -80,9 +90,18 @@ class Crop extends ContentEntityBase implements CropInterface {
    */
   public function size() {
     return [
-      'width' => $this->width->value,
-      'height' => $this->height->value,
+      'width' => (int) $this->width->value,
+      'height' => (int) $this->height->value,
     ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setSize($width, $height) {
+    $this->width = $width;
+    $this->height = $height;
+    return $this;
   }
 
   /**
@@ -97,6 +116,34 @@ class Crop extends ContentEntityBase implements CropInterface {
     }
 
     return $plugin_manager->createInstance($this->entity_type->value);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function cropExists($uri, $type = NULL) {
+    $query = \Drupal::entityQuery('crop')
+      ->condition('uri', $uri);
+    if ($type) {
+      $query->condition('type', $type);
+    }
+    return (bool) $query->execute();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function findCrop($uri, $type) {
+    $query = \Drupal::entityQuery('crop')
+      ->condition('uri', $uri);
+    if ($type) {
+      $query->condition('type', $type);
+    }
+    $crop = $query->sort('cid')
+      ->range(0, 1)
+      ->execute();
+
+    return $crop ? \Drupal::entityTypeManager()->getStorage('crop')->load(current($crop)) : NULL;
   }
 
   /**
@@ -133,6 +180,14 @@ class Crop extends ContentEntityBase implements CropInterface {
       // entry with an empty one.
       $record->revision_log = $this->original->revision_log->value;
     }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function save() {
+    parent::save();
+    image_path_flush($this->uri->value);
   }
 
   /**
