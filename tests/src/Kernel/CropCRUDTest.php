@@ -2,10 +2,10 @@
 
 /**
  * @file
- * Contains \Drupal\crop\Tests\CropCRUDTest.
+ * Contains \Drupal\Tests\crop\Kernel\CropCRUDTest.
  */
 
-namespace Drupal\crop\Tests;
+namespace Drupal\Tests\crop\Kernel;
 
 use Drupal\Component\Render\FormattableMarkup;
 use Drupal\crop\Entity\Crop;
@@ -117,6 +117,33 @@ class CropCRUDTest extends CropUnitTestBase {
     $this->assertEquals($crop->uri->value, $loaded_crop->uri->value, t('Crop::findCrop() correctly loaded crop entity.'));
     $this->assertNull(Crop::findCrop('public://nonexistent.png', $this->cropType->id()), t('Crop::findCrop() correctly handled nonexistent crop.'));
     $this->assertNull(Crop::findCrop('public://nonexistent.png', 'nonexistent_crop'), t('Crop::findCrop() correctly handled nonexistent crop.'));
+  }
+
+  /**
+   * Tests automatic removal of orphaned crops.
+   */
+  public function testOrphanRemoval() {
+    $this->installSchema('file', ['file_usage']);
+    $file = $this->getTestFile();
+    $file->save();
+
+    $values = [
+      'type' => $this->cropType->id(),
+      'entity_id' => $file->id(),
+      'entity_type' => $file->getEntityTypeId(),
+      'x' => '100',
+      'y' => '150',
+      'width' => '200',
+      'height' => '250',
+    ];
+    /** @var \Drupal\crop\CropInterface $crop */
+    $crop = $this->cropStorage->create($values);
+    $crop->save();
+
+    // Check if the crop is automatically removed at file removal.
+    $file->delete();
+    $crops = $this->cropStorage->loadByProperties(['uri' => $crop->uri->value]);
+    $this->assertEquals([], $crops, 'Crop deleted correctly.');
   }
 
 }

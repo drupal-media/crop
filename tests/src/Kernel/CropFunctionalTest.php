@@ -2,12 +2,11 @@
 
 /**
  * @file
- * Definition of Drupal\crop\Tests\CropFunctionalTest.
+ * Definition of Drupal\Tests\crop\Kernel\CropFunctionalTest.
  */
 
-namespace Drupal\crop\Tests;
+namespace Drupal\Tests\crop\Kernel;
 
-use Drupal\Component\Utility\SafeMarkup;
 use Drupal\simpletest\WebTestBase;
 
 /**

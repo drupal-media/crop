@@ -2,10 +2,10 @@
 
 /**
  * @file
- * Contains \Drupal\crop\Tests\CropUnitTestBase.
+ * Contains \Drupal\Tests\crop\Kernel\CropUnitTestBase.
  */
 
-namespace Drupal\crop\Tests;
+namespace Drupal\Tests\crop\Kernel;
 
 use Drupal\Core\StreamWrapper\PublicStream;
 use Drupal\KernelTests\KernelTestBase;
@@ -21,6 +21,13 @@ abstract class CropUnitTestBase extends KernelTestBase {
    * @var \Drupal\crop\CropStorageInterface.
    */
   protected $cropStorage;
+
+  /**
+   * The file storage service.
+   *
+   * @var \Drupal\Core\Entity\EntityStorageInterface
+   */
+  protected $fileStorage;
 
   /**
    * The crop storage.
@@ -56,17 +63,20 @@ abstract class CropUnitTestBase extends KernelTestBase {
   protected function setUp() {
     parent::setUp();
 
-    /** @var \Drupal\Core\Entity\EntityManagerInterface $entity_manager */
-    $entity_manager = $this->container->get('entity.manager');
-    $this->cropStorage = $entity_manager->getStorage('crop');
-    $this->cropTypeStorage = $entity_manager->getStorage('crop_type');
-    $this->imageStyleStorage = $entity_manager->getStorage('image_style');
+    /** @var \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager */
+    $entity_type_manager = $this->container->get('entity_type.manager');
+    $this->cropStorage = $entity_type_manager->getStorage('crop');
+    $this->cropTypeStorage = $entity_type_manager->getStorage('crop_type');
+    $this->imageStyleStorage = $entity_type_manager->getStorage('image_style');
+    $this->fileStorage = $entity_type_manager->getStorage('file');
 
     // Create DB schemas.
-    $entity_manager->onEntityTypeCreate($entity_manager->getDefinition('user'));
-    $entity_manager->onEntityTypeCreate($entity_manager->getDefinition('image_style'));
-    $entity_manager->onEntityTypeCreate($entity_manager->getDefinition('crop'));
-    $entity_manager->onEntityTypeCreate($entity_manager->getDefinition('file'));
+    /** @var \Drupal\Core\Entity\EntityTypeListenerInterface $entity_type_listener */
+    $entity_type_listener = $this->container->get('entity_type.listener');
+    $entity_type_listener->onEntityTypeCreate($entity_type_manager->getDefinition('user'));
+    $entity_type_listener->onEntityTypeCreate($entity_type_manager->getDefinition('image_style'));
+    $entity_type_listener->onEntityTypeCreate($entity_type_manager->getDefinition('crop'));
+    $entity_type_listener->onEntityTypeCreate($entity_type_manager->getDefinition('file'));
 
     // Create test image style.
     $uuid = $this->container->get('uuid')->generate();
@@ -101,7 +111,7 @@ abstract class CropUnitTestBase extends KernelTestBase {
    */
   protected function getTestFile() {
     file_unmanaged_copy(drupal_get_path('module', 'crop') . '/tests/files/sarajevo.png', PublicStream::basePath());
-    return $this->container->get('entity.manager')->getStorage('file')->create([
+    return $this->fileStorage->create([
       'uri' => 'public://sarajevo.png',
       'status' => FILE_STATUS_PERMANENT,
     ]);

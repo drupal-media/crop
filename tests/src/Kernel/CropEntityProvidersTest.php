@@ -2,10 +2,10 @@
 
 /**
  * @file
- * Contains \Drupal\crop\Tests\CropCropEntityProvidersTest.
+ * Contains \Drupal\Tests\crop\Kernel\CropEntityProvidersTest.
  */
 
-namespace Drupal\crop\Tests;
+namespace Drupal\Tests\crop\Kernel;
 
 use Drupal\crop\EntityProviderNotFoundException;
 

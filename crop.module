@@ -9,6 +9,7 @@
 
 use \Drupal\Core\Form\FormStateInterface;
 use \Drupal\media_entity\MediaBundleInterface;
+use \Drupal\file\FileInterface;
 
 /**
  * Implements hook_theme().
@@ -87,4 +88,23 @@ function crop_form_media_bundle_form_alter(&$form, FormStateInterface $form_stat
  */
 function crop_media_bundle_form_builder($entity_type, MediaBundleInterface $bundle, &$form, FormStateInterface $form_state) {
   $bundle->setThirdPartySetting('crop', 'image_field', $form_state->getValue('image_field'));
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ *
+ * Deletes orphaned crops when a file is deleted.
+ *
+ * @param \Drupal\file\FileInterface $file
+ *   The file being deleted.
+ */
+function crop_file_delete(FileInterface $file) {
+  // Get all crops for the file being deleted.
+  $crops = \Drupal::entityTypeManager()
+    ->getStorage('crop')
+    ->loadByProperties(['uri' => $file->getFileUri()]);
+
+  foreach ($crops as $crop) {
+    $crop->delete();
+  }
 }

@@ -2,10 +2,10 @@
 
 /**
  * @file
- * Contains \Drupal\crop\Tests\CropEffectTest.
+ * Contains \Drupal\Tests\crop\Kernel\CropEffectTest.
  */
 
-namespace Drupal\crop\Tests;
+namespace Drupal\Tests\crop\Kernel;
 
 /**
  * Tests the crop image effect.
