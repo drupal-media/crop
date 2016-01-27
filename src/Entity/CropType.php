@@ -74,6 +74,34 @@ class CropType extends ConfigEntityBundleBase implements \IteratorAggregate, Cro
   public $aspect_ratio;
 
   /**
+   * Soft limit width in px.
+   *
+   * @var int
+   */
+  public $soft_limit_width;
+
+  /**
+   * Soft limit height in px.
+   *
+   * @var int
+   */
+  public $soft_limit_height;
+
+  /**
+   * Hard limit width in px.
+   *
+   * @var int
+   */
+  public $hard_limit_width;
+
+  /**
+   * Hard limit height in px.
+   *
+   * @var int
+   */
+  public $hard_limit_height;
+
+  /**
    * {@inheritdoc}
    */
   public function id() {
@@ -110,6 +138,26 @@ class CropType extends ConfigEntityBundleBase implements \IteratorAggregate, Cro
       function ($bundle_info) { return $bundle_info['label'];},
       \Drupal::entityManager()->getBundleInfo('crop')
     );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getSoftLimit() {
+    return [
+      'width' => $this->soft_limit_width,
+      'height' => $this->soft_limit_height,
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getHardLimit() {
+    return [
+      'width' => $this->hard_limit_width,
+      'height' => $this->hard_limit_height,
+    ];
   }
 
 }

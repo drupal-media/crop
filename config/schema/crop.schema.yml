@@ -14,6 +14,18 @@ crop.type.*:
     aspect_ratio:
       type: string
       label: 'Aspect ratio'
+    soft_limit_width:
+      type: integer
+      label: 'Soft limit width'
+    soft_limit_height:
+      type: integer
+      label: 'Soft limit height'
+    hard_limit_width:
+      type: integer
+      label: 'Hard limit width'
+    hard_limit_height:
+      type: integer
+      label: 'Hard limit height'
     third_party_settings:
       type: sequence
       label: 'Third party settings'

@@ -48,4 +48,20 @@ interface CropTypeInterface extends ConfigEntityInterface {
    */
   public function validate();
 
+  /**
+   * Returns width and height soft limit values.
+   *
+   * @return array
+   *   Width and height values.
+   */
+  public function getSoftLimit();
+
+  /**
+   * Returns width and height hard limit values.
+   *
+   * @return array
+   *   Width and height values.
+   */
+  public function getHardLimit();
+
 }
