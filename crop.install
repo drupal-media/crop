@@ -24,26 +24,30 @@ function crop_update_8001(&$sandbox) {
     ->sort('cid', 'ASC')
     ->range($sandbox['current'], $items_per_batch)
     ->execute();
-  foreach ($crops as $cid) {
-    /** @var \Drupal\crop\Entity\Crop $crop */
-    $crop = Crop::load($cid);
-    $files = \Drupal::entityQuery('file')
-      ->condition('uri', $crop->get('uri')->value)
-      ->count();
 
-    // Checks if the file exist, if not exist delete this orphan crop.
-    if (empty($files->execute())) {
-      // Lets tell the site admin what we are doing.
-      \Drupal::logger('crop_api')
-        ->notice(
-          'The orphaned crop @cid refering to image with URI @uri has been deleted.',
-          ['@cid' => $cid, 'uri' => $crop->uri->value]
-        );
-      $crop->delete();
-    }
-
-    $sandbox['current']++;
+  if (empty($crops)) {
+    $sandbox['#finished'] = 1;
   }
+  else {
+    foreach ($crops as $cid) {
+      /** @var \Drupal\crop\Entity\Crop $crop */
+      $crop = Crop::load($cid);
+      $files = \Drupal::entityQuery('file')
+        ->condition('uri', $crop->get('uri')->value)
+        ->count();
 
-  $sandbox['#finished'] = (float) $sandbox['total'] / (float) $sandbox['current'];
+      // Checks if the file exist, if not exist delete this orphan crop.
+      if (empty($files->execute())) {
+        // Lets tell the site admin what we are doing.
+        \Drupal::logger('crop_api')
+          ->notice(
+            'The orphaned crop @cid refering to image with URI @uri has been deleted.',
+            ['@cid' => $cid, 'uri' => $crop->uri->value]
+          );
+        $crop->delete();
+      }
+      $sandbox['current']++;
+    }
+    $sandbox['#finished'] = $sandbox['current'] / $sandbox['total'];
+  }
 }
