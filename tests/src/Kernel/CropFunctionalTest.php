@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Definition of Drupal\Tests\crop\Kernel\CropFunctionalTest.
- */
-
 namespace Drupal\Tests\crop\Kernel;
 
 use Drupal\simpletest\WebTestBase;

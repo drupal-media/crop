@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\crop\Form\CropTypeForm.
- */
-
 namespace Drupal\crop\Form;
 
 use Drupal\Core\Entity\EntityForm;

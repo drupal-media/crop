@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\Tests\crop\Kernel\CropCRUDTest.
- */
-
 namespace Drupal\Tests\crop\Kernel;
 
 use Drupal\Component\Render\FormattableMarkup;

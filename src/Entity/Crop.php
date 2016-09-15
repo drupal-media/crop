@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\crop\Entity\ImageCrop.
- */
-
 namespace Drupal\crop\Entity;
 
 use Drupal\Core\Entity\ContentEntityBase;

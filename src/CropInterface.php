@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\crop\CropInterface.
- */
-
 namespace Drupal\crop;
 
 use Drupal\Core\Entity\ContentEntityInterface;

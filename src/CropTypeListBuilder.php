@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\crop\CropTypeListBuilder.
- */
-
 namespace Drupal\crop;
 
 use Drupal\Core\Config\Entity\ConfigEntityListBuilder;

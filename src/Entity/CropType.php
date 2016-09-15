@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\crop\Entity\CropType.
- */
-
 namespace Drupal\crop\Entity;
 
 use Drupal\Core\Config\Entity\ConfigEntityBundleBase;

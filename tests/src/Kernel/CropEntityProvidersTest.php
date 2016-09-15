@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\Tests\crop\Kernel\CropEntityProvidersTest.
- */
-
 namespace Drupal\Tests\crop\Kernel;
 
 use Drupal\crop\EntityProviderNotFoundException;

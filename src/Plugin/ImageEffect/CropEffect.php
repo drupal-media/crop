@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\crop\Plugin\ImageEffect\CropEffect.
- */
-
 namespace Drupal\crop\Plugin\ImageEffect;
 
 use Drupal\Core\Config\Entity\ConfigEntityStorageInterface;

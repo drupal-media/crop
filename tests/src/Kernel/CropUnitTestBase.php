@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\Tests\crop\Kernel\CropUnitTestBase.
- */
-
 namespace Drupal\Tests\crop\Kernel;
 
 use Drupal\Core\StreamWrapper\PublicStream;

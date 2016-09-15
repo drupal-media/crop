@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\Tests\crop\Kernel\CropEffectTest.
- */
-
 namespace Drupal\Tests\crop\Kernel;
 
 /**

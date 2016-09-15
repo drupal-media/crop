@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\crop\Annotation\CropEntityProvider.
- */
-
 namespace Drupal\crop\Annotation;
 
 use Drupal\Component\Annotation\Plugin;

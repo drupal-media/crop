@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Definition of \Drupal\crop\EntityProviderNotFoundException.
- */
-
 namespace Drupal\crop;
 
 /**

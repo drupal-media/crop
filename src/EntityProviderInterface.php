@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\crop\EntityProviderInterface.
- */
-
 namespace Drupal\crop;
 
 use Drupal\Component\Plugin\PluginInspectionInterface;
