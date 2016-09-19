@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\Tests\crop\Kernel;
+namespace Drupal\crop\Tests;
 
 use Drupal\simpletest\WebTestBase;
 
