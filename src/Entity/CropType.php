@@ -29,8 +29,8 @@ use Symfony\Component\Validator\ConstraintViolationList;
  *     "label" = "label",
  *   },
  *   links = {
- *     "edit-form" = "/admin/structure/crop/manage/{crop_type}",
- *     "delete-form" = "/admin/structure/crop/manage/{crop_type}/delete",
+ *     "edit-form" = "/admin/config/media/crop/manage/{crop_type}",
+ *     "delete-form" = "/admin/config/media/crop/manage/{crop_type}/delete",
  *   },
  *   constraints = {
  *     "CropTypeMachineNameValidation" = {},
