@@ -51,3 +51,11 @@ function crop_update_8001(&$sandbox) {
     $sandbox['#finished'] = $sandbox['current'] / $sandbox['total'];
   }
 }
+
+/**
+ * Let Drupal know that there is a new config available.
+ */
+function crop_update_8002() {
+  \Drupal::service('config.installer')
+    ->installDefaultConfig('module', 'crop');
+}

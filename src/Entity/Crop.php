@@ -182,7 +182,18 @@ class Crop extends ContentEntityBase implements CropInterface {
    */
   public function save() {
     parent::save();
-    image_path_flush($this->uri->value);
+
+    // If you are manually generating your image derivatives instead of waiting
+    // for them to be generated on the fly, because you are using a cloud
+    // storage service (like S3), then you may not want your image derivatives
+    // to be flushed. If they are you could end up serving 404s during the time
+    // between the crop entity being saved and the image derivative being
+    // manually generated and pushed to your cloud storage service. In that
+    // case, set this configuration variable to false.
+    $flush_derivative_images = \Drupal::config('crop.settings')->get('flush_derivative_images');
+    if ($flush_derivative_images) {
+      image_path_flush($this->uri->value);
+    }
   }
 
   /**

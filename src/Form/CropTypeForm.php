@@ -88,7 +88,7 @@ class CropTypeForm extends EntityForm {
     $form['hard_limit'] = [
       '#type' => 'fieldset',
       '#title' => $this->t('Hard limit'),
-      '#description' => $this->t('Define crop size hard limit. User is not allowed to make a smaller selection than defined here.'),
+      '#description' => $this->t('Define crop size hard limit. User is not allowed to make a smaller selection then defined here.'),
     ];
 
     $form['hard_limit']['hard_limit_width'] = [
