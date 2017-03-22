@@ -66,7 +66,7 @@ function crop_form_media_bundle_form_alter(&$form, FormStateInterface $form_stat
     ];
 
     $form['crop']['message'] = [
-      '#markup' => t('There are no file or image fields on this bundle at the moment. In order to configure crop add at least one such field and come back.')
+      '#markup' => t('There are no file or image fields on this bundle at the moment. In order to configure crop add at least one such field and come back.'),
     ];
 
     return;
@@ -97,9 +97,6 @@ function crop_media_bundle_form_builder($entity_type, MediaBundleInterface $bund
  * Implements hook_ENTITY_TYPE_delete().
  *
  * Deletes orphaned crops when a file is deleted.
- *
- * @param \Drupal\file\FileInterface $file
- *   The file being deleted.
  */
 function crop_file_delete(FileInterface $file) {
   // Get all crops for the file being deleted.

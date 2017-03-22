@@ -24,7 +24,7 @@ interface EntityProviderInterface extends PluginInspectionInterface {
    * @param \Drupal\Core\Entity\EntityInterface $entity
    *   Entity being cropping.
    *
-   * @return string|FALSE
+   * @return string|false
    *   URI as string or FALSE
    */
   public function uri(EntityInterface $entity);

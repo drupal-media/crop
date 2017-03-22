@@ -13,7 +13,7 @@ abstract class CropUnitTestBase extends KernelTestBase {
   /**
    * The crop storage.
    *
-   * @var \Drupal\crop\CropStorageInterface.
+   * @var \Drupal\crop\CropStorageInterface
    */
   protected $cropStorage;
 
@@ -27,14 +27,14 @@ abstract class CropUnitTestBase extends KernelTestBase {
   /**
    * The crop storage.
    *
-   * @var \Drupal\Core\Config\Entity\ConfigEntityStorageInterface.
+   * @var \Drupal\Core\Config\Entity\ConfigEntityStorageInterface
    */
   protected $cropTypeStorage;
 
   /**
    * The image style storage.
    *
-   * @var \Drupal\Core\Config\Entity\ConfigEntityStorageInterface.
+   * @var \Drupal\Core\Config\Entity\ConfigEntityStorageInterface
    */
   protected $imageStyleStorage;
 
@@ -92,7 +92,7 @@ abstract class CropUnitTestBase extends KernelTestBase {
           'data' => ['crop_type' => 'test_type'],
           'weight' => 0,
           'uuid' => $uuid,
-        ]
+        ],
       ],
     ]);
     $this->testStyle->save();

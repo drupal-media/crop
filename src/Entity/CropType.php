@@ -3,7 +3,6 @@
 namespace Drupal\crop\Entity;
 
 use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
-use Drupal\Core\Entity\EntityConstraintViolationList;
 use Drupal\crop\CropTypeInterface;
 use Symfony\Component\Validator\ConstraintViolationList;
 
@@ -130,7 +129,9 @@ class CropType extends ConfigEntityBundleBase implements \IteratorAggregate, Cro
    */
   public static function getCropTypeNames() {
     return array_map(
-      function ($bundle_info) { return $bundle_info['label'];},
+      function ($bundle_info) {
+        return $bundle_info['label'];
+      },
       \Drupal::entityManager()->getBundleInfo('crop')
     );
   }

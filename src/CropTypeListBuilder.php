@@ -108,7 +108,11 @@ class CropTypeListBuilder extends ConfigEntityListBuilder {
 
     $other_image_styles = array_splice($image_styles, 2);
     if ($other_image_styles) {
-      $usage_message = t('@first, @second and @count more', ['@first' => $usage[0], '@second' => $usage[1], '@count' => count($other_image_styles)]);
+      $usage_message = t('@first, @second and @count more', [
+        '@first' => $usage[0],
+        '@second' => $usage[1],
+        '@count' => count($other_image_styles),
+      ]);
     }
     else {
       $usage_message = implode(', ', $usage);
@@ -117,7 +121,6 @@ class CropTypeListBuilder extends ConfigEntityListBuilder {
 
     return $row + parent::buildRow($entity);
   }
-
 
   /**
    * {@inheritdoc}

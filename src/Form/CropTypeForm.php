@@ -5,7 +5,6 @@ namespace Drupal\crop\Form;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
-use Drupal\crop\Plugin\Validation\Constraint\RatioValidationConstraint;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 /**
@@ -25,10 +24,10 @@ class CropTypeForm extends EntityForm {
         $this->t('Edit %label crop type', array('%label' => $type->label()));
 
     $form['label'] = [
-      '#title' => t('Name'),
+      '#title' => $this->t('Name'),
       '#type' => 'textfield',
       '#default_value' => $type->label,
-      '#description' => t('The human-readable name of this crop type. This name must be unique.'),
+      '#description' => $this->t('The human-readable name of this crop type. This name must be unique.'),
       '#required' => TRUE,
       '#size' => 30,
     ];
@@ -42,14 +41,14 @@ class CropTypeForm extends EntityForm {
       ],
       // A crop type's machine name cannot be changed.
       '#disabled' => !$type->isNew(),
-      '#description' => t('A unique machine-readable name for this crop type. It must only contain lowercase letters, numbers, and underscores.'),
+      '#description' => $this->t('A unique machine-readable name for this crop type. It must only contain lowercase letters, numbers, and underscores.'),
     ];
 
     $form['description'] = [
       '#title' => t('Description'),
       '#type' => 'textarea',
       '#default_value' => $type->description,
-      '#description' => t('Describe this crop type.'),
+      '#description' => $this->t('Describe this crop type.'),
     ];
 
     $form['aspect_ratio'] = [
@@ -57,7 +56,7 @@ class CropTypeForm extends EntityForm {
       '#type' => 'textfield',
       '#default_value' => $type->aspect_ratio,
       '#attributes' => ['placeholder' => 'W:H'],
-      '#description' => t('Set an aspect ratio <b>eg: 16:9</b> or leave this empty for arbitrary aspect ratio'),
+      '#description' => $this->t('Set an aspect ratio <b>eg: 16:9</b> or leave this empty for arbitrary aspect ratio'),
     ];
 
     $form['soft_limit'] = [
@@ -118,8 +117,8 @@ class CropTypeForm extends EntityForm {
    */
   protected function actions(array $form, FormStateInterface $form_state) {
     $actions = parent::actions($form, $form_state);
-    $actions['submit']['#value'] = t('Save crop type');
-    $actions['delete']['#value'] = t('Delete crop type');
+    $actions['submit']['#value'] = $this->t('Save crop type');
+    $actions['delete']['#value'] = $this->t('Delete crop type');
     return $actions;
   }
 
@@ -172,10 +171,10 @@ class CropTypeForm extends EntityForm {
     $t_args = array('%name' => $type->label());
 
     if ($status == SAVED_UPDATED) {
-      drupal_set_message(t('The crop type %name has been updated.', $t_args));
+      drupal_set_message($this->t('The crop type %name has been updated.', $t_args));
     }
     elseif ($status == SAVED_NEW) {
-      drupal_set_message(t('The crop type %name has been added.', $t_args));
+      drupal_set_message($this->t('The crop type %name has been added.', $t_args));
       $context = array_merge($t_args, array('link' => $this->l(t('View'), new Url('crop.overview_types'))));
       $this->logger('crop')->notice('Added crop type %name.', $context);
     }

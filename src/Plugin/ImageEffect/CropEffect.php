@@ -93,12 +93,12 @@ class CropEffect extends ConfigurableImageEffectBase implements ContainerFactory
 
       if (!$image->crop($anchor['x'], $anchor['y'], $size['width'], $size['height'])) {
         $this->logger->error('Manual image crop failed using the %toolkit toolkit on %path (%mimetype, %width x %height)', [
-            '%toolkit' => $image->getToolkitId(),
-            '%path' => $image->getSource(),
-            '%mimetype' => $image->getMimeType(),
-            '%width' => $image->getWidth(),
-            '%height' => $image->getHeight(),
-          ]
+          '%toolkit' => $image->getToolkitId(),
+          '%path' => $image->getSource(),
+          '%mimetype' => $image->getMimeType(),
+          '%width' => $image->getWidth(),
+          '%height' => $image->getHeight(),
+        ]
         );
         return FALSE;
       }
@@ -163,7 +163,7 @@ class CropEffect extends ConfigurableImageEffectBase implements ContainerFactory
    * @param ImageInterface $image
    *   Image object.
    *
-   * @return \Drupal\Core\Entity\EntityInterface|\Drupal\crop\CropInterface|FALSE
+   * @return \Drupal\Core\Entity\EntityInterface|\Drupal\crop\CropInterface|false
    *   Crop entity or FALSE if crop doesn't exist.
    */
   protected function getCrop(ImageInterface $image) {
