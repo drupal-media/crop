@@ -180,8 +180,8 @@ class Crop extends ContentEntityBase implements CropInterface {
   /**
    * {@inheritdoc}
    */
-  public function save() {
-    parent::save();
+  public function postSave(EntityStorageInterface $storage, $update = TRUE) {
+    parent::postSave($storage, $update);
 
     // If you are manually generating your image derivatives instead of waiting
     // for them to be generated on the fly, because you are using a cloud
