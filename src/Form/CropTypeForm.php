@@ -4,6 +4,7 @@ namespace Drupal\crop\Form;
 
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Link;
 use Drupal\Core\Url;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
@@ -175,7 +176,7 @@ class CropTypeForm extends EntityForm {
     }
     elseif ($status == SAVED_NEW) {
       drupal_set_message($this->t('The crop type %name has been added.', $t_args));
-      $context = array_merge($t_args, array('link' => $this->l(t('View'), new Url('crop.overview_types'))));
+      $context = array_merge($t_args, array('link' => Link::createFromRoute($this->t('View'), 'crop.overview_types')));
       $this->logger('crop')->notice('Added crop type %name.', $context);
     }
 

@@ -86,7 +86,7 @@ class CropTypeListBuilder extends ConfigEntityListBuilder {
   public function buildRow(EntityInterface $entity) {
     $row = [];
     $row['name'] = [
-      'data' => $this->getLabel($entity),
+      'data' => $entity->label(),
       'class' => ['menu-label'],
     ];
     $row['description'] = Xss::filterAdmin($entity->description);

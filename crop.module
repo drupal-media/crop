@@ -32,7 +32,7 @@ function crop_theme() {
  */
 function template_preprocess_crop_crop_summary(&$variables) {
   if (!empty($variables['data']['crop_type'])) {
-    $type = \Drupal::entityManager()->getStorage('crop_type')->load($variables['data']['crop_type']);
+    $type = \Drupal::entityTypeManager()->getStorage('crop_type')->load($variables['data']['crop_type']);
     $variables['data']['crop_type'] = $type->label();
   }
 }
@@ -47,7 +47,7 @@ function crop_form_media_bundle_form_alter(&$form, FormStateInterface $form_stat
   $bundle = $form['#entity'];
   $options = [];
   $allowed_field_types = ['file', 'image'];
-  foreach (\Drupal::entityManager()->getFieldDefinitions('media', $bundle->id()) as $field_name => $field) {
+  foreach (\Drupal::service('entity_field.manager')->getFieldDefinitions('media', $bundle->id()) as $field_name => $field) {
     if (in_array($field->getType(), $allowed_field_types) && !$field->getFieldStorageDefinition()->isBaseField()) {
       $options[$field_name] = $field->getLabel();
     }
