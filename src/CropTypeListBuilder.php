@@ -70,11 +70,11 @@ class CropTypeListBuilder extends ConfigEntityListBuilder {
     $header = [];
     $header['name'] = t('Name');
     $header['description'] = [
-      'data' => t('Description'),
+      'data' => $this->t('Description'),
       'class' => [RESPONSIVE_PRIORITY_MEDIUM],
     ];
     $header['aspect_ratio'] = [
-      'data' => t('Aspect Ratio'),
+      'data' => $this->t('Aspect Ratio'),
     ];
     $header['usage'] = $this->t('Used in');
     return $header + parent::buildHeader();

@@ -45,14 +45,14 @@ class CropTypeForm extends EntityForm {
     ];
 
     $form['description'] = [
-      '#title' => t('Description'),
+      '#title' => $this->t('Description'),
       '#type' => 'textarea',
       '#default_value' => $type->description,
       '#description' => $this->t('Describe this crop type.'),
     ];
 
     $form['aspect_ratio'] = [
-      '#title' => t('Aspect Ratio'),
+      '#title' => $this->t('Aspect Ratio'),
       '#type' => 'textfield',
       '#default_value' => $type->aspect_ratio,
       '#attributes' => ['placeholder' => 'W:H'],
