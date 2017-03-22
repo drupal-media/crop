@@ -4,8 +4,10 @@ namespace Drupal\crop\Plugin\ImageEffect;
 
 use Drupal\Core\Config\Entity\ConfigEntityStorageInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Image\ImageFactory;
 use Drupal\Core\Image\ImageInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\crop\CropInterface;
 use Drupal\crop\CropStorageInterface;
 use Drupal\crop\Entity\Crop;
 use Drupal\image\ConfigurableImageEffectBase;
@@ -45,12 +47,20 @@ class CropEffect extends ConfigurableImageEffectBase implements ContainerFactory
   protected $crop;
 
   /**
+   * The image factory service.
+   *
+   * @var \Drupal\Core\Image\ImageFactory
+   */
+  protected $imageFactory;
+
+  /**
    * {@inheritdoc}
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerInterface $logger, CropStorageInterface $crop_storage, ConfigEntityStorageInterface $crop_type_storage) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, LoggerInterface $logger, CropStorageInterface $crop_storage, ConfigEntityStorageInterface $crop_type_storage, ImageFactory $image_factory) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $logger);
     $this->storage = $crop_storage;
     $this->typeStorage = $crop_type_storage;
+    $this->imageFactory = $image_factory;
   }
 
   /**
@@ -62,8 +72,9 @@ class CropEffect extends ConfigurableImageEffectBase implements ContainerFactory
       $plugin_id,
       $plugin_definition,
       $container->get('logger.factory')->get('image'),
-      $container->get('entity.manager')->getStorage('crop'),
-      $container->get('entity.manager')->getStorage('crop_type')
+      $container->get('entity_type.manager')->getStorage('crop'),
+      $container->get('entity_type.manager')->getStorage('crop_type'),
+      $container->get('image.factory')
     );
   }
 
@@ -164,6 +175,25 @@ class CropEffect extends ConfigurableImageEffectBase implements ContainerFactory
     }
 
     return $this->crop;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function transformDimensions(array &$dimensions, $uri) {
+    /** @var \Drupal\Core\Image\Image $image */
+    $image = $this->imageFactory->get($uri);
+
+    /** @var \Drupal\crop\CropInterface $crop */
+    $crop = $this->getCrop($image);
+    if (!$crop instanceof CropInterface) {
+      return;
+    }
+    $size = $crop->size();
+
+    // The new image will have the exact dimensions defined for the crop effect.
+    $dimensions['width'] = $size['width'];
+    $dimensions['height'] = $size['height'];
   }
 
 }

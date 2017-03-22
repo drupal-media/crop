@@ -53,6 +53,13 @@ abstract class CropUnitTestBase extends KernelTestBase {
   protected $cropType;
 
   /**
+   * The image effect manager.
+   *
+   * @var \Drupal\image\ImageEffectManager
+   */
+  protected $imageEffectManager;
+
+  /**
    * {@inheritdoc}
    */
   protected function setUp() {
@@ -64,6 +71,7 @@ abstract class CropUnitTestBase extends KernelTestBase {
     $this->cropTypeStorage = $entity_type_manager->getStorage('crop_type');
     $this->imageStyleStorage = $entity_type_manager->getStorage('image_style');
     $this->fileStorage = $entity_type_manager->getStorage('file');
+    $this->imageEffectManager = $this->container->get('plugin.manager.image.effect');
 
     // Create DB schemas.
     /** @var \Drupal\Core\Entity\EntityTypeListenerInterface $entity_type_listener */
