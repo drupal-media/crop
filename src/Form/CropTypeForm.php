@@ -176,7 +176,7 @@ class CropTypeForm extends EntityForm {
     }
     elseif ($status == SAVED_NEW) {
       drupal_set_message($this->t('The crop type %name has been added.', $t_args));
-      $context = array_merge($t_args, array('link' => Link::createFromRoute($this->t('View'), 'crop.overview_types')));
+      $context = array_merge($t_args, array('link' => Link::createFromRoute($this->t('View'), 'crop.overview_types')->toString()));
       $this->logger('crop')->notice('Added crop type %name.', $context);
     }
 
