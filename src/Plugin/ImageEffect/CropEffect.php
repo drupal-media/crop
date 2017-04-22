@@ -81,6 +81,18 @@ class CropEffect extends ConfigurableImageEffectBase implements ContainerFactory
   /**
    * {@inheritdoc}
    */
+  public function transformDimensions(array &$dimensions, $uri) {
+    if ($crop = $this->getCropFromUri($uri)) {
+      $size = $crop->size();
+
+      $dimensions['width'] = $size['width'];
+      $dimensions['height'] = $size['height'];
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function applyEffect(ImageInterface $image) {
     if (empty($this->configuration['crop_type']) || !$this->typeStorage->load($this->configuration['crop_type'])) {
       $this->logger->error('Manual image crop failed due to misconfigured crop type on %path.', ['%path' => $image->getSource()]);
@@ -167,9 +179,22 @@ class CropEffect extends ConfigurableImageEffectBase implements ContainerFactory
    *   Crop entity or FALSE if crop doesn't exist.
    */
   protected function getCrop(ImageInterface $image) {
+    return $this->getCropFromUri($image->getSource());
+  }
+
+  /**
+   * Gets crop entity for the given URI.
+   *
+   * @param $uri
+   *    URI of the image
+   *
+   * @return bool|\Drupal\Core\Entity\EntityInterface|\Drupal\crop\CropInterface|FALSE
+   *    Crop entity or FALSE if crop doesn't exist
+   */
+  protected function getCropFromUri($uri) {
     if (!isset($this->crop)) {
       $this->crop = FALSE;
-      if ($crop = Crop::findCrop($image->getSource(), $this->configuration['crop_type'])) {
+      if ($crop = Crop::findCrop($uri, $this->configuration['crop_type'])) {
         $this->crop = $crop;
       }
     }
