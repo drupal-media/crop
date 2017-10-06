@@ -59,8 +59,8 @@ class MediaEntity extends EntityProviderBase implements ContainerFactoryPluginIn
    * {@inheritdoc}
    */
   public function uri(EntityInterface $entity) {
-    /** @var \Drupal\media_entity\MediaBundleInterface $bundle */
-    $bundle = $this->entityTypeManager->getStorage('media_bundle')->load($entity->bundle());
+    /** @var \Drupal\media\MediaTypeInterface $bundle */
+    $bundle = $this->entityTypeManager->getStorage('media_type')->load($entity->bundle());
     $image_field = $bundle->getThirdPartySetting('crop', 'image_field');
 
     if ($entity->{$image_field}->first()->isEmpty()) {

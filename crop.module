@@ -7,12 +7,12 @@
  * Provides storage and API for image crops.
  */
 
-use \Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StreamWrapper\PublicStream;
 use Drupal\crop\Entity\Crop;
 use Drupal\image\Entity\ImageStyle;
-use \Drupal\media_entity\MediaBundleInterface;
-use \Drupal\file\FileInterface;
+use Drupal\media\MediaTypeInterface;
+use Drupal\file\FileInterface;
 
 /**
  * Implements hook_theme().
@@ -42,9 +42,9 @@ function template_preprocess_crop_crop_summary(&$variables) {
  *
  * Adds crop configuraiton fields to media bundle form.
  */
-function crop_form_media_bundle_form_alter(&$form, FormStateInterface $form_state, $form_id) {
-  /** @var \Drupal\media_entity\MediaBundleInterface $bundle */
-  $bundle = $form['#entity'];
+function crop_form_media_type_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  /** @var \Drupal\media\MediaTypeInterface $bundle */
+  $bundle = $form_state->getStorage()['type'];
   $options = [];
   $allowed_field_types = ['file', 'image'];
   foreach (\Drupal::service('entity_field.manager')->getFieldDefinitions('media', $bundle->id()) as $field_name => $field) {
@@ -53,7 +53,7 @@ function crop_form_media_bundle_form_alter(&$form, FormStateInterface $form_stat
     }
   }
 
-  $form['#entity_builders'][] = 'crop_media_bundle_form_builder';
+  $form['#entity_builders'][] = 'crop_media_type_form_builder';
   $form['crop'] = [
     '#type' => 'fieldset',
     '#title' => t('Crop configuration'),
@@ -87,9 +87,9 @@ function crop_form_media_bundle_form_alter(&$form, FormStateInterface $form_stat
  *
  * Adds third party settings to Media bundle config entity.
  *
- * @see crop_form_media_bundle_form_alter()
+ * @see crop_form_media_type_form_alter()
  */
-function crop_media_bundle_form_builder($entity_type, MediaBundleInterface $bundle, &$form, FormStateInterface $form_state) {
+function crop_media_type_form_builder($entity_type, MediaTypeInterface $bundle, &$form, FormStateInterface $form_state) {
   $bundle->setThirdPartySetting('crop', 'image_field', $form_state->getValue('image_field'));
 }
 

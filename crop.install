@@ -8,6 +8,38 @@
 use Drupal\crop\Entity\Crop;
 
 /**
+ * Implements hook_requirements().
+ */
+function crop_requirements($phase) {
+  $requirements = [];
+
+  // This branch of Crop API shouldn't be used with core < 8.4.x or with
+  // media_entity 1.x enabled.
+  $incompatible = FALSE;
+  $drupal_version = explode('.', \Drupal::VERSION);
+  if ($drupal_version[1] < 4) {
+    $incompatible = TRUE;
+  }
+  elseif (\Drupal::moduleHandler()->moduleExists('media_entity')) {
+    $info = system_get_info('module', 'media_entity');
+    if (version_compare($info['version'], '8.x-2') < 0) {
+      $incompatible = TRUE;
+    }
+  }
+
+  if ($incompatible) {
+    $requirements['crop_media'] = [
+      'title' => t('Crop API'),
+      'value' => t('This branch of Crop API is not compatible with the version of Media Entity installed.'),
+      'description' => t('This branch of Crop API is not compatible with the version of Media Entity installed.'),
+      'severity' => REQUIREMENT_ERROR,
+    ];
+  }
+
+  return $requirements;
+}
+
+/**
  * Delete orphaned crop entities.
  */
 function crop_update_8001(&$sandbox) {

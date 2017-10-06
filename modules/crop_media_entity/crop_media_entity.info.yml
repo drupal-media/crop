@@ -5,4 +5,4 @@ package: Media
 type: module
 dependencies:
   - crop
-  - media_entity
+  - drupal:media (>= 8.4)
