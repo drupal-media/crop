@@ -38,11 +38,11 @@ function template_preprocess_crop_crop_summary(&$variables) {
 }
 
 /**
- * Implements hook_form_BASE_ID_alter().
+ * Implements hook_form_FORM_ID_alter().
  *
- * Adds crop configuraiton fields to media bundle form.
+ * Adds crop configuration fields to media bundle form.
  */
-function crop_form_media_bundle_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+function crop_form_media_bundle_edit_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
   /** @var \Drupal\media_entity\MediaBundleInterface $bundle */
   $bundle = $form['#entity'];
   $options = [];
